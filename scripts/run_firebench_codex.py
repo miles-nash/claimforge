@@ -18,6 +18,7 @@ import subprocess
 import sys
 import time
 from pathlib import Path
+from typing import Any
 
 
 FIREBENCH_REPO = "https://github.com/maitrix-org/FIRE-Bench.git"
@@ -57,6 +58,8 @@ Do not inspect benchmark ground-truth files or evaluator-only files, including a
 Access-blocked model fallback:
 If the original task requires external model calls, gated weights, package dependencies, or API credentials that are unavailable in this environment, do not stall or spend the whole run rediscovering that blocker. Produce the fallback artifacts below, mark the original model claim as blocked, and end with a concise final conclusion that separates measured local evidence from blocked claims.
 
+Reserve the final minute for closure: stop expanding artifacts, write or update `run_summary.json`, and then send the final assistant conclusion. If time is tight, `run_summary.json` plus the final conclusion takes priority over optional scripts, larger manifests, or extra analysis.
+
 {fallback_template}
 """
 
@@ -95,7 +98,12 @@ def copy_task_assets(firebench: Path, task: str, work_dir: Path) -> None:
 
 
 def append_final_markers(log_file: Path, final_text: str) -> None:
-    escaped = final_text.replace("\\", "\\\\").replace("'", "\\'")
+    escaped = (
+        final_text.replace("\\", "\\\\")
+        .replace("\n", "\\n")
+        .replace("\r", "\\r")
+        .replace("'", "\\'")
+    )
     with log_file.open("a", encoding="utf-8") as handle:
         handle.write("\n" + "=" * 40 + "\n")
         handle.write("CLAIMFORGE_FINAL_RESULT\n")
@@ -109,6 +117,79 @@ def append_run_summary(log_file: Path, summary: dict[str, object]) -> None:
         handle.write("\n" + "=" * 40 + "\n")
         handle.write("CLAIMFORGE_RUN_SUMMARY\n")
         handle.write(json.dumps(summary, indent=2, sort_keys=True) + "\n")
+
+
+def listify(value: Any) -> list[str]:
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return [str(item) for item in value if str(item)]
+    if isinstance(value, tuple):
+        return [str(item) for item in value if str(item)]
+    if isinstance(value, dict):
+        return [f"{key}: {val}" for key, val in value.items()]
+    text = str(value).strip()
+    return [text] if text else []
+
+
+def synthesize_final_from_run_summary(summary_path: Path, return_code: int) -> str:
+    if not summary_path.exists():
+        return ""
+
+    try:
+        summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return ""
+    if not isinstance(summary, dict):
+        return ""
+
+    blocker_parts: list[str] = []
+    blocker = summary.get("blocker")
+    if isinstance(blocker, dict):
+        for key in ("missing_env", "missing_imports", "missing_packages", "missing_access"):
+            values = listify(blocker.get(key))
+            if values:
+                blocker_parts.append(f"{key}: {', '.join(values[:8])}")
+    elif blocker:
+        blocker_parts.extend(listify(blocker))
+
+    count_parts: list[str] = []
+    for key in (
+        "n_records",
+        "n_requests_per_model",
+        "n_requests_total",
+        "n_prompt_manifest_rows",
+        "n_scoring_manifest_rows",
+        "n_dry_run_requests_total",
+    ):
+        value = summary.get(key)
+        if isinstance(value, (int, float, str)) and str(value).strip():
+            count_parts.append(f"{key}={value}")
+
+    measured_claims = listify(summary.get("measured_claims"))[:4]
+    blocked_claims = listify(summary.get("blocked_claims"))[:4]
+    artifacts = listify(summary.get("artifacts"))[:10]
+    next_unblocker = str(summary.get("next_unblocker") or "").strip()
+
+    lines = [
+        "Runner-synthesized final from workdir `run_summary.json` because Codex did not write a final assistant message before exit or timeout.",
+        f"Return code: {return_code}.",
+        "Original model claim status: blocked unless `run_summary.json` reports completed model calls.",
+    ]
+    if blocker_parts:
+        lines.append(f"Blockers: {'; '.join(blocker_parts)}.")
+    if count_parts:
+        lines.append(f"Local/dry-run counts: {'; '.join(count_parts)}.")
+    if artifacts:
+        lines.append(f"Artifacts reported: {', '.join(artifacts)}.")
+    if measured_claims:
+        lines.append("Measured local evidence: " + " ".join(measured_claims))
+    if blocked_claims:
+        lines.append("Blocked claims: " + " ".join(blocked_claims))
+    if next_unblocker:
+        lines.append(f"Next unblocker: {next_unblocker}")
+
+    return "\n".join(lines)
 
 
 def main() -> None:
@@ -228,8 +309,15 @@ def main() -> None:
             handle.write(f"\nTIMEOUT after {args.timeout} seconds\n")
 
     final_text = ""
+    final_source = "runner_default_no_final"
     if final_file.exists():
         final_text = final_file.read_text(encoding="utf-8").strip()
+        if final_text:
+            final_source = "codex_last_message"
+    if not final_text:
+        final_text = synthesize_final_from_run_summary(work_dir / "run_summary.json", return_code)
+        if final_text:
+            final_source = "runner_synthesized_from_run_summary"
     if not final_text:
         final_text = f"Run did not produce a final Codex message. Return code: {return_code}."
     elapsed = time.time() - start
@@ -240,6 +328,7 @@ def main() -> None:
         "run_id": run_id,
         "return_code": return_code,
         "elapsed_seconds": round(elapsed, 2),
+        "final_source": final_source,
     }
     append_run_summary(log_file, summary)
     append_final_markers(log_file, final_text)

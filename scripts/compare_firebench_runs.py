@@ -43,6 +43,21 @@ def final_excerpt(text: str, chars: int = 240) -> str:
     return final[:chars]
 
 
+def final_status(final_text: str, run_summary: dict[str, Any]) -> str:
+    source = run_summary.get("final_source")
+    if source == "codex_last_message":
+        return "codex"
+    if source == "runner_synthesized_from_run_summary":
+        return "synthetic"
+    if source == "runner_default_no_final":
+        return "no"
+    if not final_text:
+        return "no"
+    if "Run did not produce a final Codex message" in final_text:
+        return "no"
+    return "codex"
+
+
 def infer_return_code(text: str) -> int | None:
     match = re.search(r"Return code: (\d+)", text)
     if match:
@@ -93,6 +108,8 @@ def summarize(log_file: str) -> dict[str, Any]:
     run_summary = load_json_match(RUN_SUMMARY_RE, text, "summary")
     work_dir = run_summary.get("work_dir") or metadata.get("work_dir")
     artifacts = artifact_inventory(work_dir)
+    excerpt = final_excerpt(text)
+    status = final_status(excerpt, run_summary)
 
     return {
         "log_file": str(path),
@@ -103,14 +120,15 @@ def summarize(log_file: str) -> dict[str, Any]:
         "run_id": run_summary.get("run_id") or metadata.get("run_id"),
         "return_code": run_summary.get("return_code", infer_return_code(text)),
         "elapsed_seconds": run_summary.get("elapsed_seconds", infer_elapsed_seconds(text)),
-        "has_final_message": "Run did not produce a final Codex message" not in final_excerpt(text, 500),
-        "final_excerpt": final_excerpt(text),
+        "final_status": status,
+        "has_final_message": status != "no",
+        "final_excerpt": excerpt,
         **artifacts,
     }
 
 
 def print_markdown(rows: list[dict[str, Any]]) -> None:
-    print("| Agent | Run id | Return | Seconds | Artifacts | Final? |")
+    print("| Agent | Run id | Return | Seconds | Artifacts | Final |")
     print("|---|---|---:|---:|---:|---|")
     for row in rows:
         elapsed = row["elapsed_seconds"]
@@ -122,7 +140,7 @@ def print_markdown(rows: list[dict[str, Any]]) -> None:
                 return_code="" if row.get("return_code") is None else row.get("return_code"),
                 elapsed=elapsed_text,
                 artifacts=row.get("artifact_count", 0),
-                final="yes" if row.get("has_final_message") else "no",
+                final=row.get("final_status") or ("yes" if row.get("has_final_message") else "no"),
             )
         )
     print()

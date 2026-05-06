@@ -15,7 +15,7 @@ For a raw baseline without the ClaimForge planning protocol:
 python3 scripts/run_firebench_codex.py --task awareness_detection --model gpt-5.5 --agent codex-raw --no-protocol
 ```
 
-ClaimForge runs inject `templates/blocked_model_fallback.md` by default. This tells access-blocked model tasks to produce an access check, data audit, prompt manifest, prompt preview, and blocked-run summary instead of spending the whole timeout rediscovering missing API keys. Disable it only for ablations:
+ClaimForge runs inject `templates/blocked_model_fallback.md` by default. This tells access-blocked model tasks to produce an access check, data audit, prompt manifest, prompt preview, and blocked-run summary instead of spending the whole timeout rediscovering missing API keys. The fallback is timeboxed as 60 seconds for access/data audit, 120 seconds for manifests, and 60 seconds reserved for `run_summary.json` plus the final conclusion. Disable it only for ablations:
 
 ```bash
 python3 scripts/run_firebench_codex.py --task awareness_detection --model gpt-5.5 --fallback-template off
@@ -43,6 +43,7 @@ The wrapper:
 - mirrors logs after completion to `.cache/FIRE-Bench/log/<agent>/<model>/<task>/<timestamp>/log.log` for evaluator compatibility
 - records whether the blocked-model fallback template was included
 - appends an OpenHands-style `final_thought='...', outputs={}` marker so FIRE-Bench's evaluator can extract the final conclusion
+- labels final-result source as `codex`, `synthetic`, or `no` in comparison output; synthetic means the wrapper built a conservative final from workdir `run_summary.json` because Codex timed out without a final assistant message
 
 Benchmark hygiene:
 

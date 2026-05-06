@@ -72,8 +72,8 @@ Heavy token use is not justified when:
 
 ## Current Best Use Of Tokens
 
-1. Shorten `templates/blocked_model_fallback.md` and add an explicit final-summary phase.
-2. Update the runner prompt so fallback runs reserve time for `run_summary.json` and a final conclusion.
-3. Rerun raw+fallback only after the shorter preamble is in place.
+1. Test whether the short fallback generalizes on `llm_racial_bias_in_medicine`.
+2. Compare against the earlier racial-bias ClaimForge/raw pair and track final status as Codex-authored, runner-synthesized from `run_summary.json`, or absent.
+3. Promote the short fallback to the default blocked-model scout protocol only after it succeeds on at least two tasks.
 4. Improve the Codex-token judge and calibrate it against one hand-written mini example.
 5. If model API keys become available later, run milestone API evaluations only after local baselines and prompt manifests exist.
