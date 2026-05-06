@@ -8,16 +8,15 @@ ClaimForge improves research-agent usefulness under blocked or partial benchmark
 
 ## Immediate Queue
 
-1. Run `claimforge-codex` on `llm_racial_bias_in_medicine` with the patched runner and a 300-second cap.
-2. Run `codex-raw` on `llm_racial_bias_in_medicine` with the patched runner and a 300-second cap.
-3. Compare artifacts, timeout behavior, and overclaiming.
-4. Write `reports/YYYY-MM-DD-racial-bias-raw-vs-claimforge.md`.
-5. Extract a reusable blocked-model fallback template.
+1. Turn `templates/blocked_model_fallback.md` into a reusable prompt block or runner option for future FIRE-Bench model-access blockers.
+2. Use `scripts/compare_firebench_runs.py` when comparing future scout pairs.
+3. Run the next clean scout pair on `uncertainty_in_instruction_following` with 300-second caps.
+4. Compare whether the blocked-model fallback template reduces timeout-without-final behavior.
+5. Update the automation prompt if the next run still spends tokens rediscovering missing API keys.
 
 ## Parking Lot
 
 - Improve `scripts/codex_claim_judge.py` with saved raw prompts/responses.
-- Add a command that summarizes rollout artifact counts automatically.
 - Investigate whether Hugging Face plugin access can support gated datasets without `HF_TOKEN`.
 - Run `mcq_selection_bias` only in a clean fresh context because this thread previously inspected its hidden conclusion.
 
@@ -26,4 +25,3 @@ ClaimForge improves research-agent usefulness under blocked or partial benchmark
 - Stop and mark invalid if a rollout reads evaluator-only files.
 - Stop direct model runs if API keys are missing; switch to local baselines.
 - Do not start multiple long rollouts in one heartbeat unless the previous one is finished and logged.
-

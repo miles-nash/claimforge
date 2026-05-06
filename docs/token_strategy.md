@@ -72,9 +72,8 @@ Heavy token use is not justified when:
 
 ## Current Best Use Of Tokens
 
-1. Run a second clean ClaimForge/raw pair on `llm_racial_bias_in_medicine` with 300-second caps.
-2. Compare whether ClaimForge again turns missing model APIs into useful local baselines.
-3. Build a small reusable "access-blocked benchmark fallback" template from the two task pairs.
+1. Codify `templates/blocked_model_fallback.md` into the runner or ClaimForge prompt so future blocked model tasks exit with useful artifacts.
+2. Use `scripts/compare_firebench_runs.py` to summarize paired FIRE-Bench scout runs without manual artifact counting.
+3. Run the next clean scout pair on `uncertainty_in_instruction_following` with 300-second caps.
 4. Improve the Codex-token judge and calibrate it against one hand-written mini example.
-5. If model API keys become available later, run milestone API evaluations only after local baselines exist.
-
+5. If model API keys become available later, run milestone API evaluations only after local baselines and prompt manifests exist.

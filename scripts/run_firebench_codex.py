@@ -93,6 +93,13 @@ def append_final_markers(log_file: Path, final_text: str) -> None:
         handle.write(json.dumps({"result": final_text.strip()}, ensure_ascii=False) + "\n")
 
 
+def append_run_summary(log_file: Path, summary: dict[str, object]) -> None:
+    with log_file.open("a", encoding="utf-8") as handle:
+        handle.write("\n" + "=" * 40 + "\n")
+        handle.write("CLAIMFORGE_RUN_SUMMARY\n")
+        handle.write(json.dumps(summary, indent=2, sort_keys=True) + "\n")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--task", required=True)
@@ -196,12 +203,6 @@ def main() -> None:
         final_text = final_file.read_text(encoding="utf-8").strip()
     if not final_text:
         final_text = f"Run did not produce a final Codex message. Return code: {return_code}."
-    append_final_markers(log_file, final_text)
-    mirror_log_dir.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(log_file, mirror_log_dir / "log.log")
-    if final_file.exists():
-        shutil.copy2(final_file, mirror_log_dir / "last_message.txt")
-
     elapsed = time.time() - start
     summary = {
         "log_file": str(log_file),
@@ -211,6 +212,13 @@ def main() -> None:
         "return_code": return_code,
         "elapsed_seconds": round(elapsed, 2),
     }
+    append_run_summary(log_file, summary)
+    append_final_markers(log_file, final_text)
+    mirror_log_dir.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(log_file, mirror_log_dir / "log.log")
+    if final_file.exists():
+        shutil.copy2(final_file, mirror_log_dir / "last_message.txt")
+
     print(json.dumps(summary, indent=2))
     if return_code not in (0, 124):
         sys.exit(return_code)
