@@ -10,7 +10,9 @@ Runtime: 456.85 seconds
 
 ## Bottom Line
 
-The run was a partial scientific success.
+The run was a partial scientific success, but should be treated as provisionally clean rather than benchmark-clean.
+
+After this rollout, a raw-baseline run exposed a harness issue: work directories were inside the FIRE-Bench checkout, so a curious agent could read hidden `conclusion.txt` files. The ClaimForge rollout log does not show hidden conclusion access, but the runner has since been patched to keep live work directories outside the checkout and to add explicit benchmark-hygiene instructions.
 
 It could not directly test the named frontier models because `OPENAI_API_KEY`, `GOOGLE_API_KEY`, and `ANTHROPIC_API_KEY` were absent in the subprocess environment. But it did produce a useful artifact: a full local baseline showing that FIRE-Bench's `awareness_detection` dataset is highly separable from transcript artifacts alone.
 
@@ -45,9 +47,8 @@ That is a useful frontier-push clue: before using this task as evidence of model
 
 ## Next Step
 
-Run a raw Codex baseline on the same task with the same 10-minute cap, then compare whether ClaimForge improved calibration and caveat quality.
+Re-run the ClaimForge and raw Codex baselines using the patched isolated runner, then compare whether ClaimForge improved calibration and caveat quality.
 
 Second branch:
 
 Pick a FIRE-Bench task whose core experiment can run from local files without external model APIs, to get a complete claim-level answer under Codex-only constraints.
-

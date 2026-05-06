@@ -25,10 +25,15 @@ The wrapper:
 
 - clones FIRE-Bench into `.cache/FIRE-Bench` if needed
 - reads only `instruction/instruction.txt` for the selected task
-- copies task `data/` and FIRE-Bench `utils/` into an isolated work directory
+- copies task `data/` and FIRE-Bench `utils/` into an isolated work directory outside the FIRE-Bench checkout
 - runs `npx @openai/codex@latest exec`
-- writes logs under `.cache/FIRE-Bench/log/<agent>/<model>/<task>/<timestamp>/log.log`
+- writes live logs under `.cache/claimforge-logs/...`
+- mirrors logs after completion to `.cache/FIRE-Bench/log/<agent>/<model>/<task>/<timestamp>/log.log` for evaluator compatibility
 - appends an OpenHands-style `final_thought='...', outputs={}` marker so FIRE-Bench's evaluator can extract the final conclusion
+
+Benchmark hygiene:
+
+The wrapper includes an explicit instruction not to inspect evaluator-only files such as `conclusion.txt`, `instruction_gt.txt`, rubrics, or expected results. This matters because local benchmark checkouts contain hidden conclusions that a non-isolated subprocess could otherwise read accidentally.
 
 Evaluation caveat:
 

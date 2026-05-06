@@ -47,10 +47,16 @@ def shell_quote_for_log(cmd: list[str]) -> str:
 
 
 def build_prompt(instruction: str, protocol: str | None) -> str:
-    if not protocol:
-        return instruction
+    harness_notice = """Benchmark hygiene rule:
+Do not inspect benchmark ground-truth files or evaluator-only files, including any file named `conclusion.txt`, `instruction_gt.txt`, `rubric.json`, `expected_result.json`, or paths under `benchmark/papers` other than the task data copied into this working directory. Treat this working directory as the complete task environment.
+"""
 
-    return f"""You are running a FIRE-Bench research task.
+    if not protocol:
+        return f"{harness_notice}\n--- FIRE-Bench task ---\n{instruction}"
+
+    return f"""{harness_notice}
+
+You are running a FIRE-Bench research task.
 
 Use the following ClaimForge protocol as your operating discipline. Do not mention the protocol unless it affects the research conclusion.
 
@@ -96,6 +102,8 @@ def main() -> None:
     parser.add_argument("--timeout", type=int, default=3600)
     parser.add_argument("--no-protocol", action="store_true", help="Run the raw FIRE-Bench prompt without ClaimForge conditioning.")
     parser.add_argument("--dry-run", action="store_true", help="Prepare files and print the command without launching Codex.")
+    parser.add_argument("--sandbox", default="workspace-write", choices=["read-only", "workspace-write", "danger-full-access"])
+    parser.add_argument("--dangerous", action="store_true", help="Use Codex's sandbox bypass flag. Only for debugging trusted local harnesses.")
     args = parser.parse_args()
 
     workspace = Path.cwd()
@@ -110,11 +118,13 @@ def main() -> None:
     run_id = f"{timestamp}_{suffix}"
     model_name = safe_model_name(args.model)
 
-    log_dir = firebench / "log" / args.agent / model_name / args.task / run_id
+    live_log_dir = workspace / ".cache" / "claimforge-logs" / args.agent / model_name / args.task / run_id
+    mirror_log_dir = firebench / "log" / args.agent / model_name / args.task / run_id
+    log_dir = live_log_dir
     log_dir.mkdir(parents=True, exist_ok=True)
     log_file = log_dir / "log.log"
     final_file = log_dir / "last_message.txt"
-    work_dir = firebench / "runs" / f"{args.agent}_{model_name}_{args.task}_{run_id}"
+    work_dir = workspace / ".cache" / "claimforge-work" / f"{args.agent}_{model_name}_{args.task}_{run_id}"
     work_dir.mkdir(parents=True, exist_ok=True)
 
     copy_task_assets(firebench, args.task, work_dir)
@@ -131,7 +141,6 @@ def main() -> None:
         "npx",
         "@openai/codex@latest",
         "exec",
-        "--dangerously-bypass-approvals-and-sandbox",
         "--cd",
         str(work_dir),
         "--skip-git-repo-check",
@@ -141,6 +150,10 @@ def main() -> None:
         args.model,
         prompt,
     ]
+    if args.dangerous:
+        cmd.insert(3, "--dangerously-bypass-approvals-and-sandbox")
+    else:
+        cmd[3:3] = ["--sandbox", args.sandbox]
 
     metadata = {
         "agent_id": args.agent,
@@ -148,7 +161,10 @@ def main() -> None:
         "llm_model": model_name,
         "run_id": run_id,
         "work_dir": str(work_dir),
+        "live_log_file": str(log_file),
+        "mirror_log_file": str(mirror_log_dir / "log.log"),
         "protocol": "none" if args.no_protocol else "claimforge",
+        "sandbox": "dangerously-bypassed" if args.dangerous else args.sandbox,
         "command": shell_quote_for_log(cmd[:-1] + ["<prompt>"]),
     }
     with log_file.open("w", encoding="utf-8") as handle:
@@ -181,10 +197,15 @@ def main() -> None:
     if not final_text:
         final_text = f"Run did not produce a final Codex message. Return code: {return_code}."
     append_final_markers(log_file, final_text)
+    mirror_log_dir.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(log_file, mirror_log_dir / "log.log")
+    if final_file.exists():
+        shutil.copy2(final_file, mirror_log_dir / "last_message.txt")
 
     elapsed = time.time() - start
     summary = {
         "log_file": str(log_file),
+        "mirror_log_file": str(mirror_log_dir / "log.log"),
         "work_dir": str(work_dir),
         "run_id": run_id,
         "return_code": return_code,
