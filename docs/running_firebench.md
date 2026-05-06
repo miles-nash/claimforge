@@ -15,7 +15,7 @@ For a raw baseline without the ClaimForge planning protocol:
 python3 scripts/run_firebench_codex.py --task awareness_detection --model gpt-5.5 --agent codex-raw --no-protocol
 ```
 
-ClaimForge runs inject `templates/blocked_model_fallback.md` by default. This tells access-blocked model tasks to produce an access check, data audit, prompt manifest, prompt preview, and blocked-run summary instead of spending the whole timeout rediscovering missing API keys. The fallback is timeboxed as 60 seconds for access/data audit, 120 seconds for manifests, and 60 seconds reserved for `run_summary.json` plus the final conclusion. Disable it only for ablations:
+ClaimForge runs inject `templates/blocked_model_fallback.md` by default. This tells access-blocked model tasks to produce an access check, data audit, prompt manifest, prompt preview, and blocked-run summary instead of spending the whole timeout rediscovering missing API keys. The fallback is timeboxed as 60 seconds for access/data audit, 120 seconds for manifests, and 60 seconds reserved for `run_summary.json` plus the final conclusion. After completing on both `uncertainty_in_instruction_following` and `llm_racial_bias_in_medicine`, this short fallback is the default blocked-model scout protocol. Disable it only for ablations:
 
 ```bash
 python3 scripts/run_firebench_codex.py --task awareness_detection --model gpt-5.5 --fallback-template off
