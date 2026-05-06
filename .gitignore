@@ -1,0 +1,16 @@
+# Local benchmark clones and generated outputs
+.env
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+.cache/
+
+# Benchmark run artifacts
+runs/
+log/
+results/
+benchmark_cache/
+
+# OS/editor noise
+.DS_Store
