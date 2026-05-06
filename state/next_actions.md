@@ -8,10 +8,10 @@ ClaimForge improves research-agent usefulness under blocked or partial benchmark
 
 ## Immediate Queue
 
-1. Turn `templates/blocked_model_fallback.md` into a reusable prompt block or runner option for future FIRE-Bench model-access blockers.
-2. Use `scripts/compare_firebench_runs.py` when comparing future scout pairs.
-3. Run the next clean scout pair on `uncertainty_in_instruction_following` with 300-second caps.
-4. Compare whether the blocked-model fallback template reduces timeout-without-final behavior.
+1. Run the next clean ClaimForge/raw scout pair on `uncertainty_in_instruction_following` with 300-second caps.
+2. Use `scripts/compare_firebench_runs.py` to compare the pair.
+3. Check whether ClaimForge with the fallback template now exits with a final message and standard blocked-run artifacts.
+4. If the pair is informative, write `reports/YYYY-MM-DD-uncertainty-raw-vs-claimforge.md`.
 5. Update the automation prompt if the next run still spends tokens rediscovering missing API keys.
 
 ## Parking Lot

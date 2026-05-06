@@ -46,13 +46,22 @@ def shell_quote_for_log(cmd: list[str]) -> str:
     return " ".join(json.dumps(part) if re.search(r"\s", part) else part for part in cmd)
 
 
-def build_prompt(instruction: str, protocol: str | None) -> str:
+def build_prompt(instruction: str, protocol: str | None, fallback_template: str | None) -> str:
     harness_notice = """Benchmark hygiene rule:
 Do not inspect benchmark ground-truth files or evaluator-only files, including any file named `conclusion.txt`, `instruction_gt.txt`, `rubric.json`, `expected_result.json`, or paths under `benchmark/papers` other than the task data copied into this working directory. Treat this working directory as the complete task environment.
 """
 
+    fallback_block = ""
+    if fallback_template:
+        fallback_block = f"""
+Access-blocked model fallback:
+If the original task requires external model calls, gated weights, package dependencies, or API credentials that are unavailable in this environment, do not stall or spend the whole run rediscovering that blocker. Produce the fallback artifacts below, mark the original model claim as blocked, and end with a concise final conclusion that separates measured local evidence from blocked claims.
+
+{fallback_template}
+"""
+
     if not protocol:
-        return f"{harness_notice}\n--- FIRE-Bench task ---\n{instruction}"
+        return f"{harness_notice}{fallback_block}\n--- FIRE-Bench task ---\n{instruction}"
 
     return f"""{harness_notice}
 
@@ -61,6 +70,8 @@ You are running a FIRE-Bench research task.
 Use the following ClaimForge protocol as your operating discipline. Do not mention the protocol unless it affects the research conclusion.
 
 {protocol}
+
+{fallback_block}
 
 Now complete the benchmark task below. Run experiments where possible. Keep an evidence ledger in your working directory. Your final assistant message must be a concise research conclusion that answers the question directly.
 
@@ -110,6 +121,12 @@ def main() -> None:
     parser.add_argument("--no-protocol", action="store_true", help="Run the raw FIRE-Bench prompt without ClaimForge conditioning.")
     parser.add_argument("--dry-run", action="store_true", help="Prepare files and print the command without launching Codex.")
     parser.add_argument("--sandbox", default="workspace-write", choices=["read-only", "workspace-write", "danger-full-access"])
+    parser.add_argument(
+        "--fallback-template",
+        default="auto",
+        choices=["auto", "always", "off"],
+        help="Inject the blocked-model fallback template. auto includes it for ClaimForge runs only.",
+    )
     parser.add_argument("--dangerous", action="store_true", help="Use Codex's sandbox bypass flag. Only for debugging trusted local harnesses.")
     args = parser.parse_args()
 
@@ -141,8 +158,18 @@ def main() -> None:
         protocol_path = workspace / "protocols" / "claimforge.md"
         protocol = protocol_path.read_text(encoding="utf-8")
 
+    fallback_template = None
+    include_fallback = args.fallback_template == "always" or (
+        args.fallback_template == "auto" and not args.no_protocol
+    )
+    fallback_path = workspace / "templates" / "blocked_model_fallback.md"
+    if include_fallback:
+        if not fallback_path.exists():
+            raise SystemExit(f"Fallback template not found: {fallback_path}")
+        fallback_template = fallback_path.read_text(encoding="utf-8")
+
     instruction = instruction_file.read_text(encoding="utf-8").strip()
-    prompt = build_prompt(instruction, protocol)
+    prompt = build_prompt(instruction, protocol, fallback_template)
 
     cmd = [
         "npx",
@@ -171,6 +198,8 @@ def main() -> None:
         "live_log_file": str(log_file),
         "mirror_log_file": str(mirror_log_dir / "log.log"),
         "protocol": "none" if args.no_protocol else "claimforge",
+        "blocked_model_fallback": "included" if fallback_template else "none",
+        "blocked_model_fallback_path": str(fallback_path) if fallback_template else None,
         "sandbox": "dangerously-bypassed" if args.dangerous else args.sandbox,
         "command": shell_quote_for_log(cmd[:-1] + ["<prompt>"]),
     }
