@@ -72,8 +72,8 @@ Heavy token use is not justified when:
 
 ## Current Best Use Of Tokens
 
-1. Run the next clean ClaimForge/raw scout pair on `uncertainty_in_instruction_following` with 300-second caps.
-2. Use `scripts/compare_firebench_runs.py` to summarize paired FIRE-Bench scout runs without manual artifact counting.
-3. Check whether the injected blocked-model fallback template improves final-message and artifact reliability.
+1. Run `codex-raw-fallback` on `uncertainty_in_instruction_following` with `--no-protocol --fallback-template always --timeout 300`.
+2. Compare ClaimForge+fallback vs raw vs raw+fallback to isolate the fallback template from the broader ClaimForge protocol.
+3. If the ablation succeeds, make the fallback preamble shorter and mandatory for access-blocked tasks.
 4. Improve the Codex-token judge and calibrate it against one hand-written mini example.
 5. If model API keys become available later, run milestone API evaluations only after local baselines and prompt manifests exist.

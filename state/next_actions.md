@@ -8,11 +8,11 @@ ClaimForge improves research-agent usefulness under blocked or partial benchmark
 
 ## Immediate Queue
 
-1. Run the next clean ClaimForge/raw scout pair on `uncertainty_in_instruction_following` with 300-second caps.
-2. Use `scripts/compare_firebench_runs.py` to compare the pair.
-3. Check whether ClaimForge with the fallback template now exits with a final message and standard blocked-run artifacts.
-4. If the pair is informative, write `reports/YYYY-MM-DD-uncertainty-raw-vs-claimforge.md`.
-5. Update the automation prompt if the next run still spends tokens rediscovering missing API keys.
+1. Run a raw fallback ablation on `uncertainty_in_instruction_following`: `--agent codex-raw-fallback --no-protocol --fallback-template always --timeout 300`.
+2. Compare three runs: ClaimForge+fallback, raw, and raw+fallback.
+3. Write or update a three-way report if the ablation isolates the fallback template effect.
+4. If raw+fallback still times out, fold the fallback template into a shorter mandatory preamble.
+5. After the ablation, consider a controlled-only milestone run if `HF_TOKEN` plus local model dependencies become available.
 
 ## Parking Lot
 

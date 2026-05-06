@@ -11,7 +11,7 @@ from typing import Any
 
 
 FINAL_RE = re.compile(r"CLAIMFORGE_FINAL_RESULT\n(?P<final>.*?)(?:\nfinal_thought=|\Z)", re.DOTALL)
-RUN_SUMMARY_RE = re.compile(r"CLAIMFORGE_RUN_SUMMARY\n(?P<summary>\{.*?\})\n=+", re.DOTALL)
+RUN_SUMMARY_RE = re.compile(r"CLAIMFORGE_RUN_SUMMARY\n(?P<summary>\{.*?\})\s*\n=+", re.DOTALL)
 EVAL_ONLY = {"conclusion.txt", "instruction_gt.txt", "rubric.json", "expected_result.json"}
 
 
