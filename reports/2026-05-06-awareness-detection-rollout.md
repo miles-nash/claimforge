@@ -49,6 +49,8 @@ That is a useful frontier-push clue: before using this task as evidence of model
 
 Re-run the ClaimForge and raw Codex baselines using the patched isolated runner, then compare whether ClaimForge improved calibration and caveat quality.
 
+Update: the clean ClaimForge rerun is recorded in `reports/2026-05-06-awareness-detection-clean-rerun.md`.
+
 Second branch:
 
 Pick a FIRE-Bench task whose core experiment can run from local files without external model APIs, to get a complete claim-level answer under Codex-only constraints.
