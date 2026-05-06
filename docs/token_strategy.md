@@ -72,8 +72,8 @@ Heavy token use is not justified when:
 
 ## Current Best Use Of Tokens
 
-1. Run `codex-raw-fallback` on `uncertainty_in_instruction_following` with `--no-protocol --fallback-template always --timeout 300`.
-2. Compare ClaimForge+fallback vs raw vs raw+fallback to isolate the fallback template from the broader ClaimForge protocol.
-3. If the ablation succeeds, make the fallback preamble shorter and mandatory for access-blocked tasks.
+1. Shorten `templates/blocked_model_fallback.md` and add an explicit final-summary phase.
+2. Update the runner prompt so fallback runs reserve time for `run_summary.json` and a final conclusion.
+3. Rerun raw+fallback only after the shorter preamble is in place.
 4. Improve the Codex-token judge and calibrate it against one hand-written mini example.
 5. If model API keys become available later, run milestone API evaluations only after local baselines and prompt manifests exist.

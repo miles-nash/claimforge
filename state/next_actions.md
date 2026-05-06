@@ -8,11 +8,11 @@ ClaimForge improves research-agent usefulness under blocked or partial benchmark
 
 ## Immediate Queue
 
-1. Run a raw fallback ablation on `uncertainty_in_instruction_following`: `--agent codex-raw-fallback --no-protocol --fallback-template always --timeout 300`.
-2. Compare three runs: ClaimForge+fallback, raw, and raw+fallback.
-3. Write or update a three-way report if the ablation isolates the fallback template effect.
-4. If raw+fallback still times out, fold the fallback template into a shorter mandatory preamble.
-5. After the ablation, consider a controlled-only milestone run if `HF_TOKEN` plus local model dependencies become available.
+1. Shorten `templates/blocked_model_fallback.md` and add an explicit 60/120/60 second time budget.
+2. Update `scripts/run_firebench_codex.py` prompt wording so fallback runs must reserve the final minute for `run_summary.json` and a final message.
+3. Rerun a short raw+fallback ablation on `uncertainty_in_instruction_following` only after the fallback preamble is shortened.
+4. If the shorter fallback still times out, make the runner synthesize a final conclusion from `run_summary.json` when present.
+5. Consider a controlled-only milestone run if `HF_TOKEN` plus local model dependencies become available.
 
 ## Parking Lot
 

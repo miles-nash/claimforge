@@ -1,4 +1,4 @@
-# Uncertainty In Instruction Following: Raw vs ClaimForge
+# Uncertainty In Instruction Following: Three-Way Scout
 
 Date: 2026-05-06
 
@@ -14,6 +14,7 @@ Runner: patched isolated runner
 |---|---|---:|---:|---|---:|
 | `claimforge-codex` | `20260506000056_13352` | 294.35s | 0 | yes | 9 |
 | `codex-raw` | `20260506000555_10100` | 300.01s | 124 | no | 0 |
+| `codex-raw-fallback` | `20260506004405_17291` | 300.01s | 124 | no | 8 |
 
 ## Hygiene
 
@@ -28,7 +29,7 @@ The copied task environment contained:
 
 No evaluator-only files were found by `scripts/compare_firebench_runs.py`.
 
-## ClaimForge Result
+## ClaimForge + Fallback
 
 ClaimForge completed before the 300-second cap and produced the standard blocked-model fallback artifacts:
 
@@ -63,19 +64,59 @@ Local non-model baselines were weak:
 
 Interpretation: response length, prompt length, instruction count, and line count are not meaningful substitutes for the intended uncertainty methods.
 
-## Raw Result
+## Raw
 
 Raw Codex recognized that `python` was missing, retried some checks with `python3`, and noticed missing `OPENAI_API_KEY`, `HF_TOKEN`, and `torch`. It did not write a final message or any durable artifacts before the 300-second timeout.
 
+## Raw + Fallback
+
+Raw Codex with only the fallback template did better than raw alone but still timed out before a final message.
+
+It produced:
+
+- `access_check.json`
+- `build_fallback_artifacts.py`
+- `data_audit.json`
+- `experiment_plan.md`
+- `prompt_manifest.jsonl`
+- `prompt_preview.json`
+- `run_summary.json`
+- `scoring_manifest.jsonl`
+
+Measured local evidence:
+
+- Controlled data: 1,221 rows: 429 `correct`, 411 `incorrect`, 381 `subtle_off`.
+- Realistic data: 714 rows: 369 `correct`, 345 `incorrect`.
+- Missing access: `OPENAI_API_KEY`, `HF_TOKEN`.
+- Missing imports: `openai`, `requests`, `transformers`, `torch`, `anthropic`, `dotenv`.
+- `utils.llm_inference` import failed because `openai` was absent.
+- No external model calls were attempted.
+
+The raw+fallback scout design contains:
+
+- 300 evaluation items.
+- 3,000 prompt-manifest rows.
+- 1,500 scoring-manifest rows.
+- 600 prompt requests per model.
+- 300 teacher-forced scoring operations per model.
+- 900 total model operations per model.
+
 ## Interpretation
 
-This is the strongest process result so far.
+This is the strongest process result so far, and the ablation is informative.
 
-The new blocked-model fallback prompt appears to have changed the failure mode: ClaimForge turned an access-blocked model task into a complete dry-run manifest, data audit, baseline sanity check, and conservative final conclusion. Raw Codex spent the same budget inspecting the files and environment but timed out without leaving artifacts.
+The fallback template alone helped: `codex-raw-fallback` produced 8 durable artifacts where raw produced none. But it was not enough to guarantee a finished run: raw+fallback still timed out and did not write a final conclusion.
+
+ClaimForge plus fallback remained strictly better under the same cap: it completed with a final message, standard artifacts, and a conservative blocked-claim conclusion. That suggests the fallback template supplies the artifact target, while the broader ClaimForge protocol supplies timeboxed closure and interpretation discipline.
 
 The original benchmark claim remains blocked. This run did not measure verbalized confidence, p(true), normalized p(true), perplexity, sequence probability, or entropy for target models. It did verify that the controlled subset is a good next milestone because the full controlled design fits the 10,000-call/model budget.
 
-## Next Experiment
+## Next Step
 
-Run a raw ablation with `--no-protocol --fallback-template always` on the same task. That will separate the effect of the fallback template from the broader ClaimForge protocol.
+Shorten the fallback preamble and add an explicit time budget:
 
+- first 60 seconds: access check and data audit
+- next 120 seconds: prompt/scoring manifest
+- final 60 seconds: run summary and final conclusion
+
+Then rerun a short raw+fallback ablation. The target behavior is not just artifacts, but a final message before timeout.
