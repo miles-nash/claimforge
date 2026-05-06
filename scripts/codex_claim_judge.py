@@ -1,0 +1,137 @@
+#!/usr/bin/env python3
+"""Claim-level judging through Codex CLI.
+
+This is a Codex-token-compatible alternative to FIRE-Bench's API-backed
+RAGChecker scoring. It is meant for iteration and audit, not leaderboard
+comparability until calibrated.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
+
+
+SCHEMA_HINT = {
+    "agent_claims": ["atomic claim from the agent conclusion"],
+    "ground_truth_claims": ["atomic claim from the supplied ground truth"],
+    "precision_checks": [
+        {
+            "agent_claim": "claim",
+            "supported_by_ground_truth": True,
+            "rationale": "short reason",
+        }
+    ],
+    "recall_checks": [
+        {
+            "ground_truth_claim": "claim",
+            "covered_by_agent": True,
+            "rationale": "short reason",
+        }
+    ],
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+}
+
+
+def read_text(path_or_literal: str) -> str:
+    path = Path(path_or_literal)
+    if path.exists():
+        return path.read_text(encoding="utf-8")
+    return path_or_literal
+
+
+def extract_json(text: str) -> dict[str, object]:
+    stripped = text.strip()
+    if stripped.startswith("```"):
+        stripped = re.sub(r"^```(?:json)?", "", stripped).strip()
+        stripped = re.sub(r"```$", "", stripped).strip()
+    try:
+        return json.loads(stripped)
+    except json.JSONDecodeError:
+        match = re.search(r"\{.*\}", text, re.DOTALL)
+        if match:
+            return json.loads(match.group(0))
+        raise
+
+
+def build_prompt(question: str, ground_truth: str, conclusion: str) -> str:
+    return f"""You are a strict claim-level scientific replication judge.
+
+Use only the supplied research question, ground-truth conclusion, and agent conclusion. Do not use outside knowledge. Break each conclusion into atomic factual claims, then score:
+
+- Precision: fraction of agent claims supported by the ground truth.
+- Recall: fraction of ground-truth claims covered by the agent.
+- F1: harmonic mean of precision and recall.
+
+Return only valid JSON matching this shape:
+
+{json.dumps(SCHEMA_HINT, indent=2)}
+
+Research question:
+{question}
+
+Ground-truth conclusion:
+{ground_truth}
+
+Agent conclusion:
+{conclusion}
+"""
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--question", required=True)
+    parser.add_argument("--ground-truth-file", required=True)
+    parser.add_argument("--conclusion-file", required=True)
+    parser.add_argument("--model", default="gpt-5.5")
+    parser.add_argument("--output", default="")
+    args = parser.parse_args()
+
+    prompt = build_prompt(
+        args.question,
+        read_text(args.ground_truth_file),
+        read_text(args.conclusion_file),
+    )
+
+    with tempfile.TemporaryDirectory(prefix="codex-judge.") as tmp:
+        tmp_path = Path(tmp)
+        last = tmp_path / "last.txt"
+        prompt_file = tmp_path / "prompt.txt"
+        prompt_file.write_text(prompt, encoding="utf-8")
+        cmd = [
+            "npx",
+            "@openai/codex@latest",
+            "exec",
+            "--dangerously-bypass-approvals-and-sandbox",
+            "--cd",
+            str(tmp_path),
+            "--skip-git-repo-check",
+            "--output-last-message",
+            str(last),
+            "--model",
+            args.model,
+            prompt,
+        ]
+        result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+        if result.returncode != 0:
+            print(result.stdout, file=sys.stderr)
+            sys.exit(result.returncode)
+
+        raw = last.read_text(encoding="utf-8") if last.exists() else result.stdout
+        parsed = extract_json(raw)
+
+    output = json.dumps(parsed, indent=2, ensure_ascii=False)
+    if args.output:
+        Path(args.output).write_text(output + "\n", encoding="utf-8")
+    print(output)
+
+
+if __name__ == "__main__":
+    main()
