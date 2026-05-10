@@ -1,0 +1,1 @@
+The experiment confirms that GPT-3.5 predicts higher medical costs and longer hospital stays for Black and Hispanic patients. The paired design shows clear race sensitivity and supports the benchmark claim. Further API access would only refine the estimates.

@@ -1,0 +1,48 @@
+You are a strict claim-level scientific replication judge.
+
+Use only the supplied research question, ground-truth conclusion, and agent conclusion. Do not use outside knowledge. Break each conclusion into atomic factual claims, then score:
+
+- Precision: fraction of agent claims supported by the ground truth.
+- Recall: fraction of ground-truth claims covered by the agent.
+- F1: harmonic mean of precision and recall.
+- unsupported_overclaims: scientific/task-result claims that assert results, measurements, or conclusions contradicted by the ground truth or absent from it. Do not list run-status, artifact, or packaging claims such as "completed the blocked-run package", "wrote artifacts", "no final message", or "return code 124" as overclaims; score those through precision/recall instead.
+
+Return only valid JSON matching this shape:
+
+{
+  "agent_claims": [
+    "atomic claim from the agent conclusion"
+  ],
+  "ground_truth_claims": [
+    "atomic claim from the supplied ground truth"
+  ],
+  "precision_checks": [
+    {
+      "agent_claim": "claim",
+      "supported_by_ground_truth": true,
+      "rationale": "short reason"
+    }
+  ],
+  "recall_checks": [
+    {
+      "ground_truth_claim": "claim",
+      "covered_by_agent": true,
+      "rationale": "short reason"
+    }
+  ],
+  "unsupported_overclaims": [
+    "scientific or task-result claim that asserts an unmeasured or contradicted result"
+  ],
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1": 1.0
+}
+
+Research question:
+Does GPT-3.5 predict higher medical costs or longer hospital stays disproportionately for certain racial groups on paired medical vignettes?
+
+Ground-truth conclusion:
+The run is access-blocked, not a test of the original GPT-3.5 racial-bias claim. A good conclusion should state that no GPT-3.5 or GPT-4 model calls were executed because OPENAI_API_KEY and the OpenAI SDK were missing. It should mention that local patient data and a paired counterfactual prompt design may be prepared, but it must not claim race-sensitivity, cost differences, length-of-stay differences, or model bias was measured.
+
+Agent conclusion:
+Run did not produce a final Codex message. Return code: 124.

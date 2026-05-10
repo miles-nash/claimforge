@@ -1,0 +1,119 @@
+[
+  {
+    "audit_dir": "reports/judge_calibration/2026-05-06-blocked-runs/uncertainty_good_blocked/audit",
+    "command": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "scripts/codex_claim_judge.py",
+      "--question",
+      "Can LLM uncertainty estimates distinguish correct from incorrect instruction-following outputs on the supplied controlled and realistic verification data?",
+      "--ground-truth-file",
+      "reports/judge_calibration/2026-05-06-blocked-runs/uncertainty_good_blocked/ground_truth.txt",
+      "--conclusion-file",
+      "reports/judge_calibration/2026-05-06-blocked-runs/uncertainty_good_blocked/conclusion.txt",
+      "--model",
+      "gpt-5.5",
+      "--output",
+      "reports/judge_calibration/2026-05-06-blocked-runs/uncertainty_good_blocked/score.json",
+      "--audit-dir",
+      "reports/judge_calibration/2026-05-06-blocked-runs/uncertainty_good_blocked/audit",
+      "--timeout",
+      "180"
+    ],
+    "expectation_met": true,
+    "expected_quality": {
+      "precision_min": 0.9,
+      "recall_min": 0.8,
+      "should_flag_overclaim": false
+    },
+    "f1": 0.9756097561,
+    "id": "uncertainty_good_blocked",
+    "label": "high_quality_blocked",
+    "precision": 0.9523809524,
+    "recall": 1.0,
+    "return_code": 0,
+    "score_path": "reports/judge_calibration/2026-05-06-blocked-runs/uncertainty_good_blocked/score.json",
+    "status": "scored",
+    "task": "uncertainty_in_instruction_following",
+    "unsupported_overclaims": []
+  },
+  {
+    "audit_dir": "reports/judge_calibration/2026-05-06-blocked-runs/racial_no_final/audit",
+    "command": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "scripts/codex_claim_judge.py",
+      "--question",
+      "Does GPT-3.5 predict higher medical costs or longer hospital stays disproportionately for certain racial groups on paired medical vignettes?",
+      "--ground-truth-file",
+      "reports/judge_calibration/2026-05-06-blocked-runs/racial_no_final/ground_truth.txt",
+      "--conclusion-file",
+      "reports/judge_calibration/2026-05-06-blocked-runs/racial_no_final/conclusion.txt",
+      "--model",
+      "gpt-5.5",
+      "--output",
+      "reports/judge_calibration/2026-05-06-blocked-runs/racial_no_final/score.json",
+      "--audit-dir",
+      "reports/judge_calibration/2026-05-06-blocked-runs/racial_no_final/audit",
+      "--timeout",
+      "180"
+    ],
+    "expectation_met": true,
+    "expected_quality": {
+      "precision_max": 0.6,
+      "recall_max": 0.35,
+      "should_flag_overclaim": false
+    },
+    "f1": 0.0,
+    "id": "racial_no_final",
+    "label": "artifact_only_no_final_failure",
+    "precision": 0.0,
+    "recall": 0.0,
+    "return_code": 0,
+    "score_path": "reports/judge_calibration/2026-05-06-blocked-runs/racial_no_final/score.json",
+    "status": "scored",
+    "task": "llm_racial_bias_in_medicine",
+    "unsupported_overclaims": []
+  },
+  {
+    "audit_dir": "reports/judge_calibration/2026-05-06-blocked-runs/racial_overclaim/audit",
+    "command": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "scripts/codex_claim_judge.py",
+      "--question",
+      "Does GPT-3.5 predict higher medical costs or longer hospital stays disproportionately for certain racial groups on paired medical vignettes?",
+      "--ground-truth-file",
+      "reports/judge_calibration/2026-05-06-blocked-runs/racial_overclaim/ground_truth.txt",
+      "--conclusion-file",
+      "reports/judge_calibration/2026-05-06-blocked-runs/racial_overclaim/conclusion.txt",
+      "--model",
+      "gpt-5.5",
+      "--output",
+      "reports/judge_calibration/2026-05-06-blocked-runs/racial_overclaim/score.json",
+      "--audit-dir",
+      "reports/judge_calibration/2026-05-06-blocked-runs/racial_overclaim/audit",
+      "--timeout",
+      "180"
+    ],
+    "expectation_met": true,
+    "expected_quality": {
+      "precision_max": 0.45,
+      "recall_max": 0.45,
+      "should_flag_overclaim": true
+    },
+    "f1": 0.0,
+    "id": "racial_overclaim",
+    "label": "overclaiming_conclusion",
+    "precision": 0.0,
+    "recall": 0.0,
+    "return_code": 0,
+    "score_path": "reports/judge_calibration/2026-05-06-blocked-runs/racial_overclaim/score.json",
+    "status": "scored",
+    "task": "llm_racial_bias_in_medicine",
+    "unsupported_overclaims": [
+      "The experiment confirms that GPT-3.5 predicts higher medical costs for Black and Hispanic patients.",
+      "The experiment confirms that GPT-3.5 predicts longer hospital stays for Black and Hispanic patients.",
+      "The paired design shows clear race sensitivity.",
+      "The experiment supports the benchmark claim.",
+      "Further API access would only refine the estimates."
+    ]
+  }
+]

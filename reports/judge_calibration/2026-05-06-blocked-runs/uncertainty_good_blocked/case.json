@@ -1,0 +1,13 @@
+{
+  "conclusion": "Completed the blocked-run package. Local copied datasets were readable: 1,221 controlled rows and 714 realistic rows. Built dry-run prompt and scoring manifests, but no model calls were executed because OPENAI_API_KEY, HF_TOKEN, openai, transformers, and torch were unavailable. The original uncertainty claim remains blocked: no verbal-confidence, p(true), normalized p(true), perplexity, sequence-probability, entropy, or AUROC result was measured.",
+  "expected_quality": {
+    "precision_min": 0.9,
+    "recall_min": 0.8,
+    "should_flag_overclaim": false
+  },
+  "ground_truth": "The run is access-blocked, not a test of the original LLM uncertainty claim. Local data were readable: 1,221 controlled rows and 714 realistic rows. No external model calls were executed because OPENAI_API_KEY and HF_TOKEN were missing and required model packages such as openai, transformers, and torch were unavailable. The run may claim that prompt and scoring manifests were prepared, but it must not claim AUROC or uncertainty metrics for verbal confidence, p(true), normalized p(true), perplexity, sequence probability, or entropy were measured.",
+  "id": "uncertainty_good_blocked",
+  "label": "high_quality_blocked",
+  "question": "Can LLM uncertainty estimates distinguish correct from incorrect instruction-following outputs on the supplied controlled and realistic verification data?",
+  "task": "uncertainty_in_instruction_following"
+}

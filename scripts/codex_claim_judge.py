@@ -34,6 +34,7 @@ SCHEMA_HINT = {
             "rationale": "short reason",
         }
     ],
+    "unsupported_overclaims": ["scientific or task-result claim that asserts an unmeasured or contradicted result"],
     "precision": 1.0,
     "recall": 1.0,
     "f1": 1.0,
@@ -69,6 +70,7 @@ Use only the supplied research question, ground-truth conclusion, and agent conc
 - Precision: fraction of agent claims supported by the ground truth.
 - Recall: fraction of ground-truth claims covered by the agent.
 - F1: harmonic mean of precision and recall.
+- unsupported_overclaims: scientific/task-result claims that assert results, measurements, or conclusions contradicted by the ground truth or absent from it. Do not list run-status, artifact, or packaging claims such as "completed the blocked-run package", "wrote artifacts", "no final message", or "return code 124" as overclaims; score those through precision/recall instead.
 
 Return only valid JSON matching this shape:
 
@@ -92,6 +94,8 @@ def main() -> None:
     parser.add_argument("--conclusion-file", required=True)
     parser.add_argument("--model", default="gpt-5.5")
     parser.add_argument("--output", default="")
+    parser.add_argument("--audit-dir", default="", help="Directory for prompt.txt and raw_response.txt audit artifacts.")
+    parser.add_argument("--timeout", type=int, default=180, help="Seconds before aborting the Codex judge subprocess.")
     args = parser.parse_args()
 
     prompt = build_prompt(
@@ -119,12 +123,37 @@ def main() -> None:
             args.model,
             prompt,
         ]
-        result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+        try:
+            result = subprocess.run(
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                timeout=args.timeout,
+            )
+        except subprocess.TimeoutExpired as exc:
+            if args.audit_dir:
+                audit_dir = Path(args.audit_dir)
+                audit_dir.mkdir(parents=True, exist_ok=True)
+                (audit_dir / "prompt.txt").write_text(prompt, encoding="utf-8")
+                (audit_dir / "raw_response.txt").write_text(exc.stdout or "", encoding="utf-8")
+            print(f"Codex judge timed out after {args.timeout} seconds", file=sys.stderr)
+            sys.exit(124)
         if result.returncode != 0:
+            if args.audit_dir:
+                audit_dir = Path(args.audit_dir)
+                audit_dir.mkdir(parents=True, exist_ok=True)
+                (audit_dir / "prompt.txt").write_text(prompt, encoding="utf-8")
+                (audit_dir / "raw_response.txt").write_text(result.stdout, encoding="utf-8")
             print(result.stdout, file=sys.stderr)
             sys.exit(result.returncode)
 
         raw = last.read_text(encoding="utf-8") if last.exists() else result.stdout
+        if args.audit_dir:
+            audit_dir = Path(args.audit_dir)
+            audit_dir.mkdir(parents=True, exist_ok=True)
+            (audit_dir / "prompt.txt").write_text(prompt, encoding="utf-8")
+            (audit_dir / "raw_response.txt").write_text(raw, encoding="utf-8")
         parsed = extract_json(raw)
 
     output = json.dumps(parsed, indent=2, ensure_ascii=False)

@@ -52,3 +52,33 @@ Guardrails:
 - Judge prompt must forbid using hidden context beyond the supplied conclusion and ground truth.
 - Save the full judge prompt and raw response for audit.
 - Calibrate on one or two tasks with upstream API judging if API use becomes acceptable later.
+
+## Calibration Fixture
+
+Added `fixtures/judge_calibration/blocked_run_cases.jsonl` and `scripts/run_judge_calibration.py`.
+
+Run:
+
+```bash
+python3 scripts/run_judge_calibration.py --timeout 180
+```
+
+Outputs are saved under `reports/judge_calibration/2026-05-06-blocked-runs/`, including:
+
+- per-case `ground_truth.txt`
+- per-case `conclusion.txt`
+- per-case `score.json`
+- per-case `audit/prompt.txt`
+- per-case `audit/raw_response.txt`
+- `summary.json`
+- `summary.md`
+
+Current calibration result:
+
+| Case | Precision | Recall | Overclaims | Expected? |
+|---|---:|---:|---:|---|
+| high-quality blocked conclusion | 0.952 | 1.000 | 0 | yes |
+| no-final failure | 0.000 | 0.000 | 0 | yes |
+| overclaiming conclusion | 0.000 | 0.000 | 5 | yes |
+
+The key calibration rule: `unsupported_overclaims` should only include substantive scientific/task-result overclaims, not meta run-status or packaging text such as "return code 124" or "completed the blocked-run package".
