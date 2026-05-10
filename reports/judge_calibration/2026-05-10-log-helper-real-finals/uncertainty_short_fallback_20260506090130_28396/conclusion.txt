@@ -1,0 +1,22 @@
+Completed the blocked-run package. I did not use web search, and I did not inspect benchmark ground-truth/evaluator-only files.
+
+Measured local evidence:
+- Local copied datasets were readable: 1,221 controlled rows and 714 realistic rows.
+- Controlled data includes the required categories: `correct`, `incorrect`, `subtle_off`.
+- Built a dry-run manifest covering 1,935 rows x 2 text uncertainty methods x 5 models = 19,350 planned requests.
+
+Blocked claims:
+- No model calls were executed.
+- No AUROC or uncertainty metric was measured.
+- The run is blocked by missing `OPENAI_API_KEY`, `HF_TOKEN`, and missing packages including `openai`, `transformers`, `torch`, `anthropic`, and `dotenv`.
+- The provided `utils.llm_inference` wrapper also does not expose token logprobs/logits needed for `p(true)`, normalized `p(true)`, perplexity, sequence probability, or entropy.
+
+Artifacts written:
+- [access_check.json](</Users/milesnash/Documents/New project 4/.cache/claimforge-work/codex-raw-fallback-short_gpt-5.5_uncertainty_in_instruction_following_20260506090130_28396/access_check.json>)
+- [data_audit.json](</Users/milesnash/Documents/New project 4/.cache/claimforge-work/codex-raw-fallback-short_gpt-5.5_uncertainty_in_instruction_following_20260506090130_28396/data_audit.json>)
+- [prompt_manifest.jsonl](</Users/milesnash/Documents/New project 4/.cache/claimforge-work/codex-raw-fallback-short_gpt-5.5_uncertainty_in_instruction_following_20260506090130_28396/prompt_manifest.jsonl>)
+- [prompt_preview.json](</Users/milesnash/Documents/New project 4/.cache/claimforge-work/codex-raw-fallback-short_gpt-5.5_uncertainty_in_instruction_following_20260506090130_28396/prompt_preview.json>)
+- [scoring_manifest.jsonl](</Users/milesnash/Documents/New project 4/.cache/claimforge-work/codex-raw-fallback-short_gpt-5.5_uncertainty_in_instruction_following_20260506090130_28396/scoring_manifest.jsonl>)
+- [run_summary.json](</Users/milesnash/Documents/New project 4/.cache/claimforge-work/codex-raw-fallback-short_gpt-5.5_uncertainty_in_instruction_following_20260506090130_28396/run_summary.json>)
+
+Validation passed: all JSON/JSONL artifacts parse successfully.

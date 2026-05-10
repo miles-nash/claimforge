@@ -82,3 +82,32 @@ Current calibration result:
 | overclaiming conclusion | 0.000 | 0.000 | 7 | yes |
 
 The key calibration rule: score scientific/task-relevant claims only. Ignore artifact inventories, file paths, validation notes, and packaging text such as "return code 124" or "completed the blocked-run package". A no-final failure can have vacuous precision but should have low recall.
+
+## FIRE-Bench Log Helper
+
+Added `scripts/judge_firebench_finals.py` so automation fires can score real Codex finals without hand-copying conclusions from log files.
+
+Run:
+
+```bash
+python3 scripts/judge_firebench_finals.py \
+  --cases fixtures/judge_calibration/real_log_cases.jsonl \
+  --output-dir reports/judge_calibration/2026-05-10-log-helper-real-finals \
+  --timeout 180
+```
+
+The helper:
+
+- extracts `CLAIMFORGE_FINAL_RESULT` from each FIRE-Bench log, falling back to sibling `last_message.txt`
+- copies the matched ground truth into a per-case output directory
+- feeds the extracted final into `scripts/codex_claim_judge.py`
+- saves `score.json`, `log_summary.json`, `runner_stdout.txt`, `summary.json`, and `summary.md`
+
+Use `--dry-run` to verify extraction and metadata without spending judge tokens. Use `--save-audit` when prompt and raw judge response artifacts are worth the extra files.
+
+Keep two score lanes separate:
+
+- `task_claim_quality`: measured evidence, blockers, and non-overclaiming conclusions
+- `process_value`: plans, baselines, budgets, evidence ledgers, and reusable scaffolding
+
+Do not weaken the task-claim judge to credit planning output. Add process-value fixtures instead.

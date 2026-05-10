@@ -1,0 +1,26 @@
+{
+  "agent_id": "claimforge-codex",
+  "artifact_count": 9,
+  "artifacts": [
+    "access_check.json",
+    "data_audit.json",
+    "evidence_ledger.md",
+    "local_baselines.json",
+    "prompt_manifest.jsonl",
+    "prompt_preview.json",
+    "research_plan.md",
+    "run_blocked_fallback.py",
+    "run_summary.json"
+  ],
+  "elapsed_seconds": 294.35,
+  "evaluator_only_files": [],
+  "final_excerpt": "Conclusion: the target LLM uncertainty claim is **blocked, not supported** in this run. No OpenAI/Hugging Face credentials were present, and required packages (`openai`, `transformers`, `torch`) were missing, so I could not measure verbaliz",
+  "final_status": "codex",
+  "has_final_message": true,
+  "log_file": "/Users/milesnash/Documents/New project 4/.cache/FIRE-Bench/log/claimforge-codex/gpt-5.5/uncertainty_in_instruction_following/20260506000056_13352/log.log",
+  "model": "gpt-5.5",
+  "protocol": "claimforge",
+  "return_code": 0,
+  "run_id": "20260506000056_13352",
+  "task_id": "uncertainty_in_instruction_following"
+}

@@ -1,6 +1,6 @@
 # Next Actions
 
-Last updated: 2026-05-06
+Last updated: 2026-05-10
 
 ## Active Hypothesis
 
@@ -8,11 +8,11 @@ ClaimForge improves research-agent usefulness under blocked or partial benchmark
 
 ## Immediate Queue
 
-1. Add a small helper that extracts final messages from FIRE-Bench logs and feeds them into `scripts/codex_claim_judge.py`.
-2. Keep two score lanes separate:
+1. Extend the judge fixture with one process-value case so ClaimForge's planning output can be credited without weakening the task-claim overclaim guard.
+2. Keep two score lanes separate in all reports and fixtures:
    - task-claim quality: measured evidence, blockers, and non-overclaiming conclusions
    - process value: plans, baselines, budgets, evidence ledgers, and reusable scaffolding
-3. Extend the judge fixture with one process-value case so ClaimForge's extra planning output can be credited without weakening the task-claim overclaim guard.
+3. Use `scripts/judge_firebench_finals.py` for future real-log task-claim scores instead of hand-copying final messages.
 4. Treat `templates/blocked_model_fallback.md` as the default blocked-model scout protocol after success on two tasks and judge-fixture calibration.
 5. Consider a controlled-only milestone run if `HF_TOKEN` plus local model dependencies become available.
 

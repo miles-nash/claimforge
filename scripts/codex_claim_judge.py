@@ -10,7 +10,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -87,6 +89,55 @@ Agent conclusion:
 """
 
 
+def codex_exec_command(tmp_path: Path, last_message: Path, model: str, prompt: str) -> list[str]:
+    codex_bin = shutil.which("codex")
+    if codex_bin:
+        return [
+            codex_bin,
+            "exec",
+            "--dangerously-bypass-approvals-and-sandbox",
+            "--cd",
+            str(tmp_path),
+            "--skip-git-repo-check",
+            "--ephemeral",
+            "--ignore-user-config",
+            "--ignore-rules",
+            "--output-last-message",
+            str(last_message),
+            "--model",
+            model,
+            prompt,
+        ]
+    return [
+        "npx",
+        "@openai/codex@latest",
+        "exec",
+        "--dangerously-bypass-approvals-and-sandbox",
+        "--cd",
+        str(tmp_path),
+        "--skip-git-repo-check",
+        "--ephemeral",
+        "--ignore-user-config",
+        "--ignore-rules",
+        "--output-last-message",
+        str(last_message),
+        "--model",
+        model,
+        prompt,
+    ]
+
+
+def prepare_codex_home(tmp_path: Path) -> Path:
+    codex_home = tmp_path / "codex_home"
+    codex_home.mkdir(parents=True, exist_ok=True)
+    source_home = Path(os.environ.get("CODEX_HOME") or Path.home() / ".codex")
+    for filename in ("auth.json", "installation_id"):
+        source = source_home / filename
+        if source.exists():
+            shutil.copy2(source, codex_home / filename)
+    return codex_home
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--question", required=True)
@@ -109,20 +160,9 @@ def main() -> None:
         last = tmp_path / "last.txt"
         prompt_file = tmp_path / "prompt.txt"
         prompt_file.write_text(prompt, encoding="utf-8")
-        cmd = [
-            "npx",
-            "@openai/codex@latest",
-            "exec",
-            "--dangerously-bypass-approvals-and-sandbox",
-            "--cd",
-            str(tmp_path),
-            "--skip-git-repo-check",
-            "--output-last-message",
-            str(last),
-            "--model",
-            args.model,
-            prompt,
-        ]
+        cmd = codex_exec_command(tmp_path, last, args.model, prompt)
+        env = os.environ.copy()
+        env["CODEX_HOME"] = str(prepare_codex_home(tmp_path))
         try:
             result = subprocess.run(
                 cmd,
@@ -130,6 +170,7 @@ def main() -> None:
                 stderr=subprocess.STDOUT,
                 text=True,
                 timeout=args.timeout,
+                env=env,
             )
         except subprocess.TimeoutExpired as exc:
             if args.audit_dir:
