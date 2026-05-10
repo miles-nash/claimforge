@@ -1,0 +1,19 @@
+Conclusion: the target LLM uncertainty claim is **blocked, not supported** in this run. No OpenAI/Hugging Face credentials were present, and required packages (`openai`, `transformers`, `torch`) were missing, so I could not measure verbalized confidence, p(true), perplexity, sequence probability, or entropy for the listed models.
+
+Measured local evidence:
+- Controlled data: 1,221 rows: 429 correct, 411 incorrect, 381 subtle_off.
+- Realistic data: 714 rows: 369 correct, 345 incorrect.
+- Local non-model baselines were weak: Controlled-Easy AUROC ≈ 0.46-0.54, Controlled-Hard ≈ 0.46-0.51, Realistic ≈ 0.43-0.45. So shallow features like length do not substitute for uncertainty estimation.
+- A valid controlled evaluation is feasible: Controlled-Easy should score correct vs completely incorrect; Controlled-Hard should score correct vs subtle_off, with AUROC as the main metric.
+
+Artifacts written:
+- `access_check.json`
+- `data_audit.json`
+- `prompt_manifest.jsonl` with 9,000 dry-run requests
+- `prompt_preview.json`
+- `local_baselines.json`
+- `run_summary.json`
+- `evidence_ledger.md`
+- `research_plan.md`
+
+Budget note: the full controlled Easy+Hard design is 9,900 calls/model, within the 10,000-call/model budget. Adding all realistic examples for every method would require 14,184 calls/model, so it needs sampling or a second budget.

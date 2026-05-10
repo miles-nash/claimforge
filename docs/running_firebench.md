@@ -15,20 +15,39 @@ For a raw baseline without the ClaimForge planning protocol:
 python3 scripts/run_firebench_codex.py --task awareness_detection --model gpt-5.5 --agent codex-raw --no-protocol
 ```
 
+ClaimForge runs inject `templates/blocked_model_fallback.md` by default. This tells access-blocked model tasks to produce an access check, data audit, prompt manifest, prompt preview, and blocked-run summary instead of spending the whole timeout rediscovering missing API keys. The fallback is timeboxed as 60 seconds for access/data audit, 120 seconds for manifests, and 60 seconds reserved for `run_summary.json` plus the final conclusion. After completing on both `uncertainty_in_instruction_following` and `llm_racial_bias_in_medicine`, this short fallback is the default blocked-model scout protocol. Disable it only for ablations:
+
+```bash
+python3 scripts/run_firebench_codex.py --task awareness_detection --model gpt-5.5 --fallback-template off
+```
+
 Summarize a run:
 
 ```bash
 python3 scripts/summarize_firebench_run.py .cache/FIRE-Bench/log/<agent>/<model>/<task>/<timestamp>/log.log
 ```
 
+Compare paired scout runs:
+
+```bash
+python3 scripts/compare_firebench_runs.py <claimforge-log.log> <raw-log.log>
+```
+
 The wrapper:
 
 - clones FIRE-Bench into `.cache/FIRE-Bench` if needed
 - reads only `instruction/instruction.txt` for the selected task
-- copies task `data/` and FIRE-Bench `utils/` into an isolated work directory
+- copies task `data/` and FIRE-Bench `utils/` into an isolated work directory outside the FIRE-Bench checkout
 - runs `npx @openai/codex@latest exec`
-- writes logs under `.cache/FIRE-Bench/log/<agent>/<model>/<task>/<timestamp>/log.log`
+- writes live logs under `.cache/claimforge-logs/...`
+- mirrors logs after completion to `.cache/FIRE-Bench/log/<agent>/<model>/<task>/<timestamp>/log.log` for evaluator compatibility
+- records whether the blocked-model fallback template was included
 - appends an OpenHands-style `final_thought='...', outputs={}` marker so FIRE-Bench's evaluator can extract the final conclusion
+- labels final-result source as `codex`, `synthetic`, or `no` in comparison output; synthetic means the wrapper built a conservative final from workdir `run_summary.json` because Codex timed out without a final assistant message
+
+Benchmark hygiene:
+
+The wrapper includes an explicit instruction not to inspect evaluator-only files such as `conclusion.txt`, `instruction_gt.txt`, rubrics, or expected results. This matters because local benchmark checkouts contain hidden conclusions that a non-isolated subprocess could otherwise read accidentally.
 
 Evaluation caveat:
 

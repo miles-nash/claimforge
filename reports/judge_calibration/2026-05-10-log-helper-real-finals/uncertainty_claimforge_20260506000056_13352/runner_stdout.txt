@@ -1,0 +1,318 @@
+{
+  "agent_claims": [
+    "The target LLM uncertainty claim is blocked in this run.",
+    "The target LLM uncertainty claim is not supported in this run.",
+    "No OpenAI/Hugging Face credentials were present.",
+    "Required packages openai, transformers, and torch were missing.",
+    "Verbalized confidence, p(true), perplexity, sequence probability, and entropy could not be measured for the listed models.",
+    "Controlled data contained 1,221 rows.",
+    "Controlled data contained 429 correct labels.",
+    "Controlled data contained 411 incorrect labels.",
+    "Controlled data contained 381 subtle_off labels.",
+    "Realistic data contained 714 rows.",
+    "Realistic data contained 369 correct labels.",
+    "Realistic data contained 345 incorrect labels.",
+    "Local non-model baselines were weak.",
+    "Controlled-Easy local baseline AUROC was approximately 0.46-0.54.",
+    "Controlled-Hard local baseline AUROC was approximately 0.46-0.51.",
+    "Realistic local baseline AUROC was approximately 0.43-0.45.",
+    "Shallow features like length do not substitute for uncertainty estimation.",
+    "A valid controlled evaluation is feasible.",
+    "Controlled-Easy should score correct versus completely incorrect outputs.",
+    "Controlled-Hard should score correct versus subtle_off outputs.",
+    "AUROC should be the main metric for the controlled evaluation.",
+    "The prompt manifest contained 9,000 dry-run requests.",
+    "The full controlled Easy+Hard design is 9,900 calls per model.",
+    "The full controlled Easy+Hard design is within a 10,000-call-per-model budget.",
+    "Adding all realistic examples for every method would require 14,184 calls per model.",
+    "Adding all realistic examples for every method needs sampling or a second budget."
+  ],
+  "ground_truth_claims": [
+    "The run is access-blocked.",
+    "The run is not a test of the original LLM uncertainty claim.",
+    "Local controlled data contained 1,221 rows.",
+    "Local controlled data contained 429 correct labels.",
+    "Local controlled data contained 411 incorrect labels.",
+    "Local controlled data contained 381 subtle_off labels.",
+    "Local realistic data contained 714 rows.",
+    "Local realistic data contained 369 correct labels.",
+    "Local realistic data contained 345 incorrect labels.",
+    "No external model calls were executed.",
+    "OpenAI/Hugging Face credentials were missing.",
+    "Required packages including openai, transformers, and torch were missing.",
+    "Dry-run prompts were prepared.",
+    "There were 9,000 dry-run requests in the prompt manifest.",
+    "The full controlled Easy+Hard design would be 9,900 calls per model.",
+    "Weak local non-model baselines may be reported as shallow sanity checks.",
+    "Verbalized confidence was not measured.",
+    "p(true) was not measured.",
+    "Normalized p(true) was not measured.",
+    "Perplexity was not measured.",
+    "Sequence probability was not measured.",
+    "Entropy was not measured.",
+    "Target-model AUROC was not measured."
+  ],
+  "precision_checks": [
+    {
+      "agent_claim": "The target LLM uncertainty claim is blocked in this run.",
+      "supported_by_ground_truth": true,
+      "rationale": "Ground truth says the run is access-blocked."
+    },
+    {
+      "agent_claim": "The target LLM uncertainty claim is not supported in this run.",
+      "supported_by_ground_truth": true,
+      "rationale": "Ground truth says this was not a test of the original claim."
+    },
+    {
+      "agent_claim": "No OpenAI/Hugging Face credentials were present.",
+      "supported_by_ground_truth": true,
+      "rationale": "Ground truth says these credentials were missing."
+    },
+    {
+      "agent_claim": "Required packages openai, transformers, and torch were missing.",
+      "supported_by_ground_truth": true,
+      "rationale": "Ground truth lists these required packages as missing."
+    },
+    {
+      "agent_claim": "Verbalized confidence, p(true), perplexity, sequence probability, and entropy could not be measured for the listed models.",
+      "supported_by_ground_truth": true,
+      "rationale": "Ground truth says these uncertainty metrics must not be claimed as measured."
+    },
+    {
+      "agent_claim": "Controlled data contained 1,221 rows.",
+      "supported_by_ground_truth": true,
+      "rationale": "Exact count matches ground truth."
+    },
+    {
+      "agent_claim": "Controlled data contained 429 correct labels.",
+      "supported_by_ground_truth": true,
+      "rationale": "Exact count matches ground truth."
+    },
+    {
+      "agent_claim": "Controlled data contained 411 incorrect labels.",
+      "supported_by_ground_truth": true,
+      "rationale": "Exact count matches ground truth."
+    },
+    {
+      "agent_claim": "Controlled data contained 381 subtle_off labels.",
+      "supported_by_ground_truth": true,
+      "rationale": "Exact count matches ground truth."
+    },
+    {
+      "agent_claim": "Realistic data contained 714 rows.",
+      "supported_by_ground_truth": true,
+      "rationale": "Exact count matches ground truth."
+    },
+    {
+      "agent_claim": "Realistic data contained 369 correct labels.",
+      "supported_by_ground_truth": true,
+      "rationale": "Exact count matches ground truth."
+    },
+    {
+      "agent_claim": "Realistic data contained 345 incorrect labels.",
+      "supported_by_ground_truth": true,
+      "rationale": "Exact count matches ground truth."
+    },
+    {
+      "agent_claim": "Local non-model baselines were weak.",
+      "supported_by_ground_truth": true,
+      "rationale": "Ground truth allows reporting weak local non-model baselines."
+    },
+    {
+      "agent_claim": "Controlled-Easy local baseline AUROC was approximately 0.46-0.54.",
+      "supported_by_ground_truth": false,
+      "rationale": "Ground truth does not provide this AUROC range."
+    },
+    {
+      "agent_claim": "Controlled-Hard local baseline AUROC was approximately 0.46-0.51.",
+      "supported_by_ground_truth": false,
+      "rationale": "Ground truth does not provide this AUROC range."
+    },
+    {
+      "agent_claim": "Realistic local baseline AUROC was approximately 0.43-0.45.",
+      "supported_by_ground_truth": false,
+      "rationale": "Ground truth does not provide this AUROC range."
+    },
+    {
+      "agent_claim": "Shallow features like length do not substitute for uncertainty estimation.",
+      "supported_by_ground_truth": true,
+      "rationale": "This is a reasonable restatement of weak local non-model baselines as shallow sanity checks."
+    },
+    {
+      "agent_claim": "A valid controlled evaluation is feasible.",
+      "supported_by_ground_truth": true,
+      "rationale": "Ground truth says the full controlled Easy+Hard design is valid to claim."
+    },
+    {
+      "agent_claim": "Controlled-Easy should score correct versus completely incorrect outputs.",
+      "supported_by_ground_truth": false,
+      "rationale": "Ground truth does not state this specific contrast."
+    },
+    {
+      "agent_claim": "Controlled-Hard should score correct versus subtle_off outputs.",
+      "supported_by_ground_truth": false,
+      "rationale": "Ground truth does not state this specific contrast."
+    },
+    {
+      "agent_claim": "AUROC should be the main metric for the controlled evaluation.",
+      "supported_by_ground_truth": false,
+      "rationale": "Ground truth does not prescribe AUROC as the main metric."
+    },
+    {
+      "agent_claim": "The prompt manifest contained 9,000 dry-run requests.",
+      "supported_by_ground_truth": true,
+      "rationale": "Exact count matches ground truth."
+    },
+    {
+      "agent_claim": "The full controlled Easy+Hard design is 9,900 calls per model.",
+      "supported_by_ground_truth": true,
+      "rationale": "Exact count matches ground truth."
+    },
+    {
+      "agent_claim": "The full controlled Easy+Hard design is within a 10,000-call-per-model budget.",
+      "supported_by_ground_truth": false,
+      "rationale": "Ground truth gives the 9,900 calls per model count but does not mention a 10,000-call budget."
+    },
+    {
+      "agent_claim": "Adding all realistic examples for every method would require 14,184 calls per model.",
+      "supported_by_ground_truth": false,
+      "rationale": "Ground truth does not provide this call count."
+    },
+    {
+      "agent_claim": "Adding all realistic examples for every method needs sampling or a second budget.",
+      "supported_by_ground_truth": false,
+      "rationale": "Ground truth does not state this budget conclusion."
+    }
+  ],
+  "recall_checks": [
+    {
+      "ground_truth_claim": "The run is access-blocked.",
+      "covered_by_agent": true,
+      "rationale": "Agent explicitly says the claim is blocked."
+    },
+    {
+      "ground_truth_claim": "The run is not a test of the original LLM uncertainty claim.",
+      "covered_by_agent": true,
+      "rationale": "Agent says the target claim is blocked and not supported."
+    },
+    {
+      "ground_truth_claim": "Local controlled data contained 1,221 rows.",
+      "covered_by_agent": true,
+      "rationale": "Agent reports the same count."
+    },
+    {
+      "ground_truth_claim": "Local controlled data contained 429 correct labels.",
+      "covered_by_agent": true,
+      "rationale": "Agent reports the same count."
+    },
+    {
+      "ground_truth_claim": "Local controlled data contained 411 incorrect labels.",
+      "covered_by_agent": true,
+      "rationale": "Agent reports the same count."
+    },
+    {
+      "ground_truth_claim": "Local controlled data contained 381 subtle_off labels.",
+      "covered_by_agent": true,
+      "rationale": "Agent reports the same count."
+    },
+    {
+      "ground_truth_claim": "Local realistic data contained 714 rows.",
+      "covered_by_agent": true,
+      "rationale": "Agent reports the same count."
+    },
+    {
+      "ground_truth_claim": "Local realistic data contained 369 correct labels.",
+      "covered_by_agent": true,
+      "rationale": "Agent reports the same count."
+    },
+    {
+      "ground_truth_claim": "Local realistic data contained 345 incorrect labels.",
+      "covered_by_agent": true,
+      "rationale": "Agent reports the same count."
+    },
+    {
+      "ground_truth_claim": "No external model calls were executed.",
+      "covered_by_agent": true,
+      "rationale": "Agent states credentials and packages were missing and metrics could not be measured for listed models."
+    },
+    {
+      "ground_truth_claim": "OpenAI/Hugging Face credentials were missing.",
+      "covered_by_agent": true,
+      "rationale": "Agent states this directly."
+    },
+    {
+      "ground_truth_claim": "Required packages including openai, transformers, and torch were missing.",
+      "covered_by_agent": true,
+      "rationale": "Agent states this directly."
+    },
+    {
+      "ground_truth_claim": "Dry-run prompts were prepared.",
+      "covered_by_agent": true,
+      "rationale": "Agent mentions the prompt manifest with dry-run requests."
+    },
+    {
+      "ground_truth_claim": "There were 9,000 dry-run requests in the prompt manifest.",
+      "covered_by_agent": true,
+      "rationale": "Agent reports the same count."
+    },
+    {
+      "ground_truth_claim": "The full controlled Easy+Hard design would be 9,900 calls per model.",
+      "covered_by_agent": true,
+      "rationale": "Agent reports the same count."
+    },
+    {
+      "ground_truth_claim": "Weak local non-model baselines may be reported as shallow sanity checks.",
+      "covered_by_agent": true,
+      "rationale": "Agent reports weak local non-model baselines and describes them as shallow features."
+    },
+    {
+      "ground_truth_claim": "Verbalized confidence was not measured.",
+      "covered_by_agent": true,
+      "rationale": "Agent says it could not measure verbalized confidence."
+    },
+    {
+      "ground_truth_claim": "p(true) was not measured.",
+      "covered_by_agent": true,
+      "rationale": "Agent says it could not measure p(true)."
+    },
+    {
+      "ground_truth_claim": "Normalized p(true) was not measured.",
+      "covered_by_agent": false,
+      "rationale": "Agent mentions p(true) but not normalized p(true)."
+    },
+    {
+      "ground_truth_claim": "Perplexity was not measured.",
+      "covered_by_agent": true,
+      "rationale": "Agent says it could not measure perplexity."
+    },
+    {
+      "ground_truth_claim": "Sequence probability was not measured.",
+      "covered_by_agent": true,
+      "rationale": "Agent says it could not measure sequence probability."
+    },
+    {
+      "ground_truth_claim": "Entropy was not measured.",
+      "covered_by_agent": true,
+      "rationale": "Agent says it could not measure entropy."
+    },
+    {
+      "ground_truth_claim": "Target-model AUROC was not measured.",
+      "covered_by_agent": true,
+      "rationale": "Agent says the target claim was blocked and uncertainty metrics could not be measured for the listed models."
+    }
+  ],
+  "unsupported_overclaims": [
+    "Controlled-Easy local baseline AUROC was approximately 0.46-0.54.",
+    "Controlled-Hard local baseline AUROC was approximately 0.46-0.51.",
+    "Realistic local baseline AUROC was approximately 0.43-0.45.",
+    "Controlled-Easy should score correct versus completely incorrect outputs.",
+    "Controlled-Hard should score correct versus subtle_off outputs.",
+    "AUROC should be the main metric for the controlled evaluation.",
+    "The full controlled Easy+Hard design is within a 10,000-call-per-model budget.",
+    "Adding all realistic examples for every method would require 14,184 calls per model.",
+    "Adding all realistic examples for every method needs sampling or a second budget."
+  ],
+  "precision": 0.6538461538461539,
+  "recall": 0.9565217391304348,
+  "f1": 0.7764705882352941
+}

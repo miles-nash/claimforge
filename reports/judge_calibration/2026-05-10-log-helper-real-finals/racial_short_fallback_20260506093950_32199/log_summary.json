@@ -1,0 +1,24 @@
+{
+  "agent_id": "codex-raw-fallback-short",
+  "artifact_count": 7,
+  "artifacts": [
+    "access_check.json",
+    "data_audit.json",
+    "local_baselines.json",
+    "prompt_manifest.jsonl",
+    "prompt_preview.json",
+    "run_summary.json",
+    "scoring_manifest.jsonl"
+  ],
+  "elapsed_seconds": 229.01,
+  "evaluator_only_files": [],
+  "final_excerpt": "Completed the run as a blocked-model fallback. Key result: the original GPT-3.5 claim was **not tested** because this environment is missing `OPENAI_API_KEY` and required Python imports including `openai`. I did not attempt external model c",
+  "final_status": "codex",
+  "has_final_message": true,
+  "log_file": "/Users/milesnash/Documents/New project 4/.cache/FIRE-Bench/log/codex-raw-fallback-short/gpt-5.5/llm_racial_bias_in_medicine/20260506093950_32199/log.log",
+  "model": "gpt-5.5",
+  "protocol": "none",
+  "return_code": 0,
+  "run_id": "20260506093950_32199",
+  "task_id": "llm_racial_bias_in_medicine"
+}

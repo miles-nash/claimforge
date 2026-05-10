@@ -1,0 +1,10 @@
+{
+  "_fixture_dir": "fixtures/judge_calibration",
+  "agent": "claimforge-codex",
+  "conclusion_file": "real_runs/uncertainty_claimforge_conclusion.txt",
+  "ground_truth_file": "real_runs/uncertainty_claimforge_ground_truth.txt",
+  "id": "uncertainty_claimforge_20260506000056_13352",
+  "question": "Can LLM uncertainty estimates distinguish correct from incorrect instruction-following outputs on the supplied controlled and realistic verification data?",
+  "run_id": "20260506000056_13352",
+  "task": "uncertainty_in_instruction_following"
+}

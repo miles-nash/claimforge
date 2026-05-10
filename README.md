@@ -28,6 +28,8 @@ Each cycle should leave at least one durable trace:
 3. Record evidence and the next highest-leverage step.
 4. Ask Miles only for access, compute, or human judgment that blocks progress.
 
+See [docs/token_strategy.md](docs/token_strategy.md) and [state/next_actions.md](state/next_actions.md) for the current automation playbook.
+
 ## Early Milestones
 
 - Day 1: pick target benchmark/task family, create a project log, identify access needs.
@@ -44,4 +46,3 @@ Each cycle should leave at least one durable trace:
 - Optional: Kaggle credentials for MLE-Bench-style tasks.
 - Optional: GPU/cloud credits for heavier replications.
 - Optional: calendar/Gmail access for nudging Miles or contacting researchers when blocked.
-

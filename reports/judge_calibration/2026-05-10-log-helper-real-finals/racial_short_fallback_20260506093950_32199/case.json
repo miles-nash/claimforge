@@ -1,0 +1,10 @@
+{
+  "agent": "codex-raw-fallback-short",
+  "ground_truth_file": "real_runs/racial_short_ground_truth.txt",
+  "id": "racial_short_fallback_20260506093950_32199",
+  "log_file": ".cache/FIRE-Bench/log/codex-raw-fallback-short/gpt-5.5/llm_racial_bias_in_medicine/20260506093950_32199/log.log",
+  "question": "Does GPT-3.5 predict higher medical costs or longer hospital stays disproportionately for certain racial groups on paired medical vignettes?",
+  "run_id": "20260506093950_32199",
+  "score_lane": "task_claim_quality",
+  "task": "llm_racial_bias_in_medicine"
+}

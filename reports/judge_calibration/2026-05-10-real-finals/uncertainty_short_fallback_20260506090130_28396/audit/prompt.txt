@@ -1,0 +1,71 @@
+You are a strict claim-level scientific replication judge.
+
+Use only the supplied research question, ground-truth conclusion, and agent conclusion. Do not use outside knowledge. Break each conclusion into atomic scientific/task-relevant claims, then score. Do not include artifact inventories, file paths, links, packaging status, validation status, or generic run-status bookkeeping as agent_claims or ground_truth_claims unless they directly state scientific evidence, access blockers, data counts, experimental design, measured metrics, or blocked/unblocked task conclusions.
+
+- Precision: fraction of agent claims supported by the ground truth.
+- Recall: fraction of ground-truth claims covered by the agent.
+- F1: harmonic mean of precision and recall.
+- unsupported_overclaims: scientific/task-result claims that assert results, measurements, or conclusions contradicted by the ground truth or absent from it. Do not list run-status, artifact, validation, or packaging claims such as "completed the blocked-run package", "wrote artifacts", "validation passed", "no final message", or "return code 124" as overclaims; ignore those bookkeeping claims for this claim-quality score.
+
+Return only valid JSON matching this shape:
+
+{
+  "agent_claims": [
+    "atomic claim from the agent conclusion"
+  ],
+  "ground_truth_claims": [
+    "atomic claim from the supplied ground truth"
+  ],
+  "precision_checks": [
+    {
+      "agent_claim": "claim",
+      "supported_by_ground_truth": true,
+      "rationale": "short reason"
+    }
+  ],
+  "recall_checks": [
+    {
+      "ground_truth_claim": "claim",
+      "covered_by_agent": true,
+      "rationale": "short reason"
+    }
+  ],
+  "unsupported_overclaims": [
+    "scientific or task-result claim that asserts an unmeasured or contradicted result"
+  ],
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1": 1.0
+}
+
+Research question:
+Can LLM uncertainty estimates distinguish correct from incorrect instruction-following outputs on the supplied controlled and realistic verification data?
+
+Ground-truth conclusion:
+The run is access-blocked, not a test of the original LLM uncertainty claim. Local copied data were readable: 1,221 controlled rows and 714 realistic rows. Controlled labels included correct, incorrect, and subtle_off. No external model calls were executed because OPENAI_API_KEY, HF_TOKEN, and required packages such as openai, transformers, torch, anthropic, and dotenv were missing. The run also lacked token logprob/logit support needed for p(true), normalized p(true), perplexity, sequence probability, and entropy. It is valid to claim a dry-run prompt manifest was built for 1,935 rows, two text uncertainty methods, and five requested models, with 19,350 planned requests total or 3,870 planned text requests per model. It is valid to claim JSON/JSONL artifacts parsed. It must not claim any AUROC or uncertainty metric was measured.
+
+
+Agent conclusion:
+Completed the blocked-run package. I did not use web search, and I did not inspect benchmark ground-truth/evaluator-only files.
+
+Measured local evidence:
+- Local copied datasets were readable: 1,221 controlled rows and 714 realistic rows.
+- Controlled data includes the required categories: `correct`, `incorrect`, `subtle_off`.
+- Built a dry-run manifest covering 1,935 rows x 2 text uncertainty methods x 5 models = 19,350 planned requests.
+
+Blocked claims:
+- No model calls were executed.
+- No AUROC or uncertainty metric was measured.
+- The run is blocked by missing `OPENAI_API_KEY`, `HF_TOKEN`, and missing packages including `openai`, `transformers`, `torch`, `anthropic`, and `dotenv`.
+- The provided `utils.llm_inference` wrapper also does not expose token logprobs/logits needed for `p(true)`, normalized `p(true)`, perplexity, sequence probability, or entropy.
+
+Artifacts written:
+- `access_check.json`
+- `data_audit.json`
+- `prompt_manifest.jsonl`
+- `prompt_preview.json`
+- `scoring_manifest.jsonl`
+- `run_summary.json`
+
+Validation passed: all JSON/JSONL artifacts parse successfully.
+

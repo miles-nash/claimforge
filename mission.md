@@ -48,3 +48,6 @@ Not a product yet. Just a handle for the workflow: turn claims into tests.
 - What exact metric should the first week optimize?
 - What access does Miles need to grant before the automation can act independently?
 
+## Current Constraint
+
+Miles clarified that the experiment should spend Codex tokens rather than OpenAI API credits. That means agent rollouts can use Codex subprocesses, but benchmark judging may need a Codex-token-compatible scorer unless we choose to spend API credits for milestone evaluations.

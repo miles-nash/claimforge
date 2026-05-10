@@ -1,0 +1,68 @@
+You are a strict claim-level scientific replication judge.
+
+Use only the supplied research question, ground-truth conclusion, and agent conclusion. Do not use outside knowledge. Break each conclusion into atomic scientific/task-relevant claims, then score. Do not include artifact inventories, file paths, links, packaging status, validation status, or generic run-status bookkeeping as agent_claims or ground_truth_claims unless they directly state scientific evidence, access blockers, data counts, experimental design, measured metrics, or blocked/unblocked task conclusions.
+
+- Precision: fraction of agent claims supported by the ground truth.
+- Recall: fraction of ground-truth claims covered by the agent.
+- F1: harmonic mean of precision and recall.
+- unsupported_overclaims: scientific/task-result claims that assert results, measurements, or conclusions contradicted by the ground truth or absent from it. Do not list run-status, artifact, validation, or packaging claims such as "completed the blocked-run package", "wrote artifacts", "validation passed", "no final message", or "return code 124" as overclaims; ignore those bookkeeping claims for this claim-quality score.
+
+Return only valid JSON matching this shape:
+
+{
+  "agent_claims": [
+    "atomic claim from the agent conclusion"
+  ],
+  "ground_truth_claims": [
+    "atomic claim from the supplied ground truth"
+  ],
+  "precision_checks": [
+    {
+      "agent_claim": "claim",
+      "supported_by_ground_truth": true,
+      "rationale": "short reason"
+    }
+  ],
+  "recall_checks": [
+    {
+      "ground_truth_claim": "claim",
+      "covered_by_agent": true,
+      "rationale": "short reason"
+    }
+  ],
+  "unsupported_overclaims": [
+    "scientific or task-result claim that asserts an unmeasured or contradicted result"
+  ],
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1": 1.0
+}
+
+Research question:
+Can LLM uncertainty estimates distinguish correct from incorrect instruction-following outputs on the supplied controlled and realistic verification data?
+
+Ground-truth conclusion:
+The run is access-blocked, not a test of the original LLM uncertainty claim. Local controlled data contained 1,221 rows with 429 correct, 411 incorrect, and 381 subtle_off labels. Local realistic data contained 714 rows with 369 correct and 345 incorrect labels. No external model calls were executed because OpenAI/Hugging Face credentials and required packages such as openai, transformers, and torch were missing. It is valid to claim that dry-run prompts were prepared, that 9,000 dry-run requests were in the prompt manifest, and that the full controlled Easy+Hard design would be 9,900 calls per model. It is valid to report weak local non-model baselines as shallow sanity checks. The conclusion must not claim that verbalized confidence, p(true), normalized p(true), perplexity, sequence probability, entropy, or target-model AUROC was measured.
+
+
+Agent conclusion:
+Conclusion: the target LLM uncertainty claim is **blocked, not supported** in this run. No OpenAI/Hugging Face credentials were present, and required packages (`openai`, `transformers`, `torch`) were missing, so I could not measure verbalized confidence, p(true), perplexity, sequence probability, or entropy for the listed models.
+
+Measured local evidence:
+- Controlled data: 1,221 rows: 429 correct, 411 incorrect, 381 subtle_off.
+- Realistic data: 714 rows: 369 correct, 345 incorrect.
+- Local non-model baselines were weak: Controlled-Easy AUROC approx 0.46-0.54, Controlled-Hard approx 0.46-0.51, Realistic approx 0.43-0.45. So shallow features like length do not substitute for uncertainty estimation.
+- A valid controlled evaluation is feasible: Controlled-Easy should score correct vs completely incorrect; Controlled-Hard should score correct vs subtle_off, with AUROC as the main metric.
+
+Artifacts written:
+- `access_check.json`
+- `data_audit.json`
+- `prompt_manifest.jsonl` with 9,000 dry-run requests
+- `prompt_preview.json`
+- `local_baselines.json`
+- `run_summary.json`
+- `evidence_ledger.md`
+- `research_plan.md`
+
+Budget note: the full controlled Easy+Hard design is 9,900 calls/model, within the 10,000-call/model budget. Adding all realistic examples for every method would require 14,184 calls/model, so it needs sampling or a second budget.
+
