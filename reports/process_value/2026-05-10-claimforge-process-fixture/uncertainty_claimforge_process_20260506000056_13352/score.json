@@ -1,0 +1,78 @@
+{
+  "agent": "claimforge-codex",
+  "criteria": [
+    {
+      "description": "Records missing credentials/imports and avoids external calls.",
+      "earned": true,
+      "id": "access_audit",
+      "points": 1
+    },
+    {
+      "description": "Counts local data and names leakage risks.",
+      "earned": true,
+      "id": "data_audit",
+      "points": 1
+    },
+    {
+      "description": "Builds dry-run prompts plus a preview.",
+      "earned": true,
+      "id": "prompt_manifest",
+      "points": 1
+    },
+    {
+      "description": "Runs local non-model sanity baselines without promoting them to model evidence.",
+      "earned": true,
+      "id": "baseline_sanity",
+      "points": 1
+    },
+    {
+      "description": "States request budget and scale-up tradeoffs.",
+      "earned": true,
+      "id": "budgeting",
+      "points": 1
+    },
+    {
+      "description": "Keeps an evidence ledger with inventory, planned evidence, and fallback run notes.",
+      "earned": true,
+      "id": "evidence_ledger",
+      "points": 1
+    },
+    {
+      "description": "Defines claim shape, minimum experiment, failure modes, and fallback path.",
+      "earned": true,
+      "id": "research_plan",
+      "points": 1
+    },
+    {
+      "description": "Separates measured local claims, blocked model claims, and next unblocker.",
+      "earned": true,
+      "id": "blocked_boundary",
+      "points": 1
+    },
+    {
+      "description": "Leaves reusable fallback script scaffolding.",
+      "earned": true,
+      "id": "reusable_scaffold",
+      "points": 1
+    },
+    {
+      "description": "Does not include evaluator-only files in the artifact bundle.",
+      "earned": true,
+      "id": "evaluator_hygiene",
+      "points": 1
+    }
+  ],
+  "earned_points": 10,
+  "expectation_met": true,
+  "expected_quality": {
+    "score_min": 0.9
+  },
+  "id": "uncertainty_claimforge_process_20260506000056_13352",
+  "label": "ClaimForge process value for blocked uncertainty run",
+  "possible_points": 10,
+  "run_id": "20260506000056_13352",
+  "score": 1.0,
+  "score_lane": "process_value",
+  "status": "scored",
+  "task": "uncertainty_in_instruction_following"
+}

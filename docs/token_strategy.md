@@ -72,9 +72,10 @@ Heavy token use is not justified when:
 
 ## Current Best Use Of Tokens
 
-1. Add a process-value fixture and rubric so ClaimForge planning artifacts can be credited without weakening the task-claim overclaim guard.
+1. Add process-value cases for the short-fallback runs, then write a two-lane comparison report: task-claim quality beside process value.
 2. Use `scripts/judge_firebench_finals.py` for future real-log task-claim scores; the hand-copy step is now obsolete.
-3. Keep task-claim quality separate from process value in every report and fixture.
-4. Use the short fallback as the default blocked-model scout protocol; it has now succeeded on two tasks and produced clean task-claim scores on real finals.
-5. Run more scout rollouts only when they answer a new process question or provide a judge-calibration example.
-6. If model API keys become available later, run milestone API evaluations only after local baselines and prompt manifests exist.
+3. Use `scripts/score_process_value_cases.py` for process-value scoring; do not weaken the task-claim judge to credit planning output.
+4. Keep task-claim quality separate from process value in every report and fixture.
+5. Use the short fallback as the default blocked-model scout protocol; it has now succeeded on two tasks and produced clean task-claim scores on real finals.
+6. Run more scout rollouts only when they answer a new process question or provide a judge-calibration example.
+7. If model API keys become available later, run milestone API evaluations only after local baselines and prompt manifests exist.

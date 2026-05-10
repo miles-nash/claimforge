@@ -8,13 +8,14 @@ ClaimForge improves research-agent usefulness under blocked or partial benchmark
 
 ## Immediate Queue
 
-1. Extend the judge fixture with one process-value case so ClaimForge's planning output can be credited without weakening the task-claim overclaim guard.
-2. Keep two score lanes separate in all reports and fixtures:
+1. Add process-value cases for the short-fallback runs and score them with `scripts/score_process_value_cases.py`.
+2. Write a two-lane comparison report that places task-claim quality beside process value for ClaimForge and short fallback.
+3. Keep two score lanes separate in all reports and fixtures:
    - task-claim quality: measured evidence, blockers, and non-overclaiming conclusions
    - process value: plans, baselines, budgets, evidence ledgers, and reusable scaffolding
-3. Use `scripts/judge_firebench_finals.py` for future real-log task-claim scores instead of hand-copying final messages.
-4. Treat `templates/blocked_model_fallback.md` as the default blocked-model scout protocol after success on two tasks and judge-fixture calibration.
-5. Consider a controlled-only milestone run if `HF_TOKEN` plus local model dependencies become available.
+4. Use `scripts/judge_firebench_finals.py` for future real-log task-claim scores instead of hand-copying final messages.
+5. Treat `templates/blocked_model_fallback.md` as the default blocked-model scout protocol after success on two tasks and judge-fixture calibration.
+6. Consider a controlled-only milestone run if `HF_TOKEN` plus local model dependencies become available.
 
 ## Parking Lot
 

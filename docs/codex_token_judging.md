@@ -111,3 +111,30 @@ Keep two score lanes separate:
 - `process_value`: plans, baselines, budgets, evidence ledgers, and reusable scaffolding
 
 Do not weaken the task-claim judge to credit planning output. Add process-value fixtures instead.
+
+## Process-Value Lane
+
+Added `fixtures/judge_calibration/process_value_cases.jsonl` and `scripts/score_process_value_cases.py`.
+
+Run:
+
+```bash
+python3 scripts/score_process_value_cases.py \
+  --fixture fixtures/judge_calibration/process_value_cases.jsonl \
+  --output-dir reports/process_value/2026-05-10-claimforge-process-fixture
+```
+
+This is a deterministic local rubric over artifact bundles, not a Codex claim judge. It scores whether a blocked run produced useful research-process scaffolding:
+
+- access audit
+- data audit
+- prompt manifest and preview
+- local non-model sanity baselines
+- budget and scale-up notes
+- evidence ledger
+- research plan
+- measured-vs-blocked claim boundary
+- reusable fallback script
+- evaluator-file hygiene
+
+The first ClaimForge uncertainty process fixture scored 10/10. That result should be read beside, not merged into, the task-claim score. The split is the point: ClaimForge can be valuable for planning and scaffolding even when its final task conclusion is less compact than the short fallback.
