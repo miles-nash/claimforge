@@ -25,6 +25,16 @@ def load_cases(path: Path) -> list[dict[str, object]]:
     return cases
 
 
+def case_text(case: dict[str, object], key: str, fixture_dir: Path) -> str:
+    file_key = f"{key}_file"
+    if file_key in case:
+        path = Path(str(case[file_key]))
+        if not path.is_absolute():
+            path = fixture_dir / path
+        return path.read_text(encoding="utf-8")
+    return str(case.get(key, ""))
+
+
 def run_case(case: dict[str, object], output_dir: Path, model: str, timeout: int, dry_run: bool) -> dict[str, object]:
     case_id = str(case["id"])
     case_dir = output_dir / case_id
@@ -66,8 +76,9 @@ def run_case(case: dict[str, object], output_dir: Path, model: str, timeout: int
         return result
 
     case_dir.mkdir(parents=True, exist_ok=True)
-    ground_truth_path.write_text(str(case.get("ground_truth", "")), encoding="utf-8")
-    conclusion_path.write_text(str(case.get("conclusion", "")), encoding="utf-8")
+    fixture_dir = Path(str(case.get("_fixture_dir", ".")))
+    ground_truth_path.write_text(case_text(case, "ground_truth", fixture_dir), encoding="utf-8")
+    conclusion_path.write_text(case_text(case, "conclusion", fixture_dir), encoding="utf-8")
     (case_dir / "case.json").write_text(json.dumps(case, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     completed = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
@@ -147,7 +158,10 @@ def main() -> None:
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
-    cases = load_cases(Path(args.fixture))
+    fixture_path = Path(args.fixture)
+    cases = load_cases(fixture_path)
+    for case in cases:
+        case["_fixture_dir"] = str(fixture_path.parent)
     output_dir = Path(args.output_dir)
     if not args.dry_run:
         output_dir.mkdir(parents=True, exist_ok=True)

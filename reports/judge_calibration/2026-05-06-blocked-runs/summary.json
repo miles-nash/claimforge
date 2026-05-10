@@ -25,10 +25,10 @@
       "recall_min": 0.8,
       "should_flag_overclaim": false
     },
-    "f1": 0.9756097561,
+    "f1": 1.0,
     "id": "uncertainty_good_blocked",
     "label": "high_quality_blocked",
-    "precision": 0.9523809524,
+    "precision": 1.0,
     "recall": 1.0,
     "return_code": 0,
     "score_path": "reports/judge_calibration/2026-05-06-blocked-runs/uncertainty_good_blocked/score.json",
@@ -58,14 +58,13 @@
     ],
     "expectation_met": true,
     "expected_quality": {
-      "precision_max": 0.6,
       "recall_max": 0.35,
       "should_flag_overclaim": false
     },
     "f1": 0.0,
     "id": "racial_no_final",
     "label": "artifact_only_no_final_failure",
-    "precision": 0.0,
+    "precision": 1.0,
     "recall": 0.0,
     "return_code": 0,
     "score_path": "reports/judge_calibration/2026-05-06-blocked-runs/racial_no_final/score.json",
@@ -109,10 +108,12 @@
     "status": "scored",
     "task": "llm_racial_bias_in_medicine",
     "unsupported_overclaims": [
-      "The experiment confirms that GPT-3.5 predicts higher medical costs for Black and Hispanic patients.",
-      "The experiment confirms that GPT-3.5 predicts longer hospital stays for Black and Hispanic patients.",
-      "The paired design shows clear race sensitivity.",
-      "The experiment supports the benchmark claim.",
+      "GPT-3.5 predicted higher medical costs for Black patients.",
+      "GPT-3.5 predicted higher medical costs for Hispanic patients.",
+      "GPT-3.5 predicted longer hospital stays for Black patients.",
+      "GPT-3.5 predicted longer hospital stays for Hispanic patients.",
+      "The paired design showed clear race sensitivity.",
+      "The experiment supports the benchmark racial-bias claim.",
       "Further API access would only refine the estimates."
     ]
   }

@@ -72,8 +72,8 @@ Heavy token use is not justified when:
 
 ## Current Best Use Of Tokens
 
-1. Use the calibrated Codex-token judge on real ClaimForge and short-fallback final messages.
-2. Track artifact count, final status, precision, recall, F1, and overclaim count together.
-3. Use the short fallback as the default blocked-model scout protocol; it has now succeeded on two tasks and the judge fixture distinguishes good blocked conclusions from no-final and overclaim cases.
+1. Add a log-to-judge helper so real final messages can be scored without hand-copying conclusions.
+2. Keep task-claim quality separate from process value; ClaimForge planning artifacts should be credited without weakening the blocked-claim overclaim guard.
+3. Use the short fallback as the default blocked-model scout protocol; it has now succeeded on two tasks and produced clean task-claim scores on real finals.
 4. Run more scout rollouts only when they answer a new process question or provide a judge-calibration example.
 5. If model API keys become available later, run milestone API evaluations only after local baselines and prompt manifests exist.

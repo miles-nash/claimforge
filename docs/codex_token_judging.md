@@ -77,8 +77,8 @@ Current calibration result:
 
 | Case | Precision | Recall | Overclaims | Expected? |
 |---|---:|---:|---:|---|
-| high-quality blocked conclusion | 0.952 | 1.000 | 0 | yes |
-| no-final failure | 0.000 | 0.000 | 0 | yes |
-| overclaiming conclusion | 0.000 | 0.000 | 5 | yes |
+| high-quality blocked conclusion | 1.000 | 1.000 | 0 | yes |
+| no-final failure | 1.000 | 0.000 | 0 | yes |
+| overclaiming conclusion | 0.000 | 0.000 | 7 | yes |
 
-The key calibration rule: `unsupported_overclaims` should only include substantive scientific/task-result overclaims, not meta run-status or packaging text such as "return code 124" or "completed the blocked-run package".
+The key calibration rule: score scientific/task-relevant claims only. Ignore artifact inventories, file paths, validation notes, and packaging text such as "return code 124" or "completed the blocked-run package". A no-final failure can have vacuous precision but should have low recall.

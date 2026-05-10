@@ -1,4 +1,5 @@
 {
+  "_fixture_dir": "fixtures/judge_calibration",
   "conclusion": "Completed the blocked-run package. Local copied datasets were readable: 1,221 controlled rows and 714 realistic rows. Built dry-run prompt and scoring manifests, but no model calls were executed because OPENAI_API_KEY, HF_TOKEN, openai, transformers, and torch were unavailable. The original uncertainty claim remains blocked: no verbal-confidence, p(true), normalized p(true), perplexity, sequence-probability, entropy, or AUROC result was measured.",
   "expected_quality": {
     "precision_min": 0.9,

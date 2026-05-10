@@ -1,7 +1,7 @@
 {
+  "_fixture_dir": "fixtures/judge_calibration",
   "conclusion": "Run did not produce a final Codex message. Return code: 124.",
   "expected_quality": {
-    "precision_max": 0.6,
     "recall_max": 0.35,
     "should_flag_overclaim": false
   },

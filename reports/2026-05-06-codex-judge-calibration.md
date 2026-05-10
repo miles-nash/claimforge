@@ -43,11 +43,11 @@ Saved outputs under `reports/judge_calibration/2026-05-06-blocked-runs/`.
 
 | Case | Label | Precision | Recall | F1 | Overclaims | Expected? |
 |---|---|---:|---:|---:|---:|---|
-| `uncertainty_good_blocked` | high-quality blocked conclusion | 0.952 | 1.000 | 0.976 | 0 | yes |
-| `racial_no_final` | artifact-only / no-final failure | 0.000 | 0.000 | 0.000 | 0 | yes |
-| `racial_overclaim` | overclaiming conclusion | 0.000 | 0.000 | 0.000 | 5 | yes |
+| `uncertainty_good_blocked` | high-quality blocked conclusion | 1.000 | 1.000 | 1.000 | 0 | yes |
+| `racial_no_final` | artifact-only / no-final failure | 1.000 | 0.000 | 0.000 | 0 | yes |
+| `racial_overclaim` | overclaiming conclusion | 0.000 | 0.000 | 0.000 | 7 | yes |
 
-Two prompt corrections were needed: early runs treated meta run-status claims like "return code 124" and packaging claims like "completed the blocked-run package" as overclaims. The prompt now restricts `unsupported_overclaims` to substantive scientific or task-result claims, so no-final failures are low-recall rather than overclaiming.
+Three prompt/fixture corrections were needed: early runs treated meta run-status claims like "return code 124", packaging claims like "completed the blocked-run package", and artifact inventory lines as task claims. The prompt now scores scientific/task-relevant claims only. No-final failures are judged by low recall and zero substantive overclaims, not low precision.
 
 ## Next Step
 

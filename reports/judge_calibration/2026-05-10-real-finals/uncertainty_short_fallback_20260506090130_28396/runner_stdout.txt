@@ -1,0 +1,206 @@
+{
+  "agent_claims": [
+    "Local copied controlled datasets were readable and contained 1,221 rows.",
+    "Local copied realistic datasets were readable and contained 714 rows.",
+    "Controlled data included correct, incorrect, and subtle_off categories.",
+    "A dry-run manifest was built covering 1,935 rows.",
+    "The dry-run manifest covered two text uncertainty methods.",
+    "The dry-run manifest covered five models.",
+    "The dry-run manifest represented 19,350 planned requests.",
+    "No model calls were executed.",
+    "No AUROC was measured.",
+    "No uncertainty metric was measured.",
+    "The run was blocked by missing OPENAI_API_KEY.",
+    "The run was blocked by missing HF_TOKEN.",
+    "The run was blocked by missing packages including openai, transformers, torch, anthropic, and dotenv.",
+    "The provided utils.llm_inference wrapper did not expose token logprobs or logits.",
+    "Token logprobs or logits were needed for p(true), normalized p(true), perplexity, sequence probability, and entropy."
+  ],
+  "ground_truth_claims": [
+    "The run was access-blocked.",
+    "The run was not a test of the original LLM uncertainty claim.",
+    "Local copied controlled data were readable and contained 1,221 rows.",
+    "Local copied realistic data were readable and contained 714 rows.",
+    "Controlled labels included correct, incorrect, and subtle_off.",
+    "No external model calls were executed.",
+    "OPENAI_API_KEY was missing.",
+    "HF_TOKEN was missing.",
+    "Required packages including openai, transformers, torch, anthropic, and dotenv were missing.",
+    "The run lacked token logprob or logit support needed for p(true), normalized p(true), perplexity, sequence probability, and entropy.",
+    "A dry-run prompt manifest was built for 1,935 rows.",
+    "The dry-run prompt manifest covered two text uncertainty methods.",
+    "The dry-run prompt manifest covered five requested models.",
+    "The dry-run prompt manifest covered 19,350 planned requests total.",
+    "The dry-run prompt manifest covered 3,870 planned text requests per model.",
+    "No AUROC was measured.",
+    "No uncertainty metric was measured."
+  ],
+  "precision_checks": [
+    {
+      "agent_claim": "Local copied controlled datasets were readable and contained 1,221 rows.",
+      "supported_by_ground_truth": true,
+      "rationale": "Ground truth gives the same controlled row count and readability."
+    },
+    {
+      "agent_claim": "Local copied realistic datasets were readable and contained 714 rows.",
+      "supported_by_ground_truth": true,
+      "rationale": "Ground truth gives the same realistic row count and readability."
+    },
+    {
+      "agent_claim": "Controlled data included correct, incorrect, and subtle_off categories.",
+      "supported_by_ground_truth": true,
+      "rationale": "Ground truth lists those controlled labels."
+    },
+    {
+      "agent_claim": "A dry-run manifest was built covering 1,935 rows.",
+      "supported_by_ground_truth": true,
+      "rationale": "Ground truth says a dry-run prompt manifest was built for 1,935 rows."
+    },
+    {
+      "agent_claim": "The dry-run manifest covered two text uncertainty methods.",
+      "supported_by_ground_truth": true,
+      "rationale": "Ground truth says two text uncertainty methods."
+    },
+    {
+      "agent_claim": "The dry-run manifest covered five models.",
+      "supported_by_ground_truth": true,
+      "rationale": "Ground truth says five requested models."
+    },
+    {
+      "agent_claim": "The dry-run manifest represented 19,350 planned requests.",
+      "supported_by_ground_truth": true,
+      "rationale": "Ground truth gives 19,350 planned requests total."
+    },
+    {
+      "agent_claim": "No model calls were executed.",
+      "supported_by_ground_truth": true,
+      "rationale": "Ground truth says no external model calls were executed."
+    },
+    {
+      "agent_claim": "No AUROC was measured.",
+      "supported_by_ground_truth": true,
+      "rationale": "Ground truth says no AUROC was measured."
+    },
+    {
+      "agent_claim": "No uncertainty metric was measured.",
+      "supported_by_ground_truth": true,
+      "rationale": "Ground truth says no uncertainty metric was measured."
+    },
+    {
+      "agent_claim": "The run was blocked by missing OPENAI_API_KEY.",
+      "supported_by_ground_truth": true,
+      "rationale": "Ground truth names the missing OPENAI_API_KEY."
+    },
+    {
+      "agent_claim": "The run was blocked by missing HF_TOKEN.",
+      "supported_by_ground_truth": true,
+      "rationale": "Ground truth names the missing HF_TOKEN."
+    },
+    {
+      "agent_claim": "The run was blocked by missing packages including openai, transformers, torch, anthropic, and dotenv.",
+      "supported_by_ground_truth": true,
+      "rationale": "Ground truth lists those required missing packages."
+    },
+    {
+      "agent_claim": "The provided utils.llm_inference wrapper did not expose token logprobs or logits.",
+      "supported_by_ground_truth": true,
+      "rationale": "Ground truth says the run lacked token logprob/logit support."
+    },
+    {
+      "agent_claim": "Token logprobs or logits were needed for p(true), normalized p(true), perplexity, sequence probability, and entropy.",
+      "supported_by_ground_truth": true,
+      "rationale": "Ground truth lists the same methods needing token logprob/logit support."
+    }
+  ],
+  "recall_checks": [
+    {
+      "ground_truth_claim": "The run was access-blocked.",
+      "covered_by_agent": true,
+      "rationale": "Agent explicitly says the run was blocked by missing credentials and packages."
+    },
+    {
+      "ground_truth_claim": "The run was not a test of the original LLM uncertainty claim.",
+      "covered_by_agent": true,
+      "rationale": "Agent states no model calls and no uncertainty metrics were measured, which covers why it was not a test."
+    },
+    {
+      "ground_truth_claim": "Local copied controlled data were readable and contained 1,221 rows.",
+      "covered_by_agent": true,
+      "rationale": "Agent states the same."
+    },
+    {
+      "ground_truth_claim": "Local copied realistic data were readable and contained 714 rows.",
+      "covered_by_agent": true,
+      "rationale": "Agent states the same."
+    },
+    {
+      "ground_truth_claim": "Controlled labels included correct, incorrect, and subtle_off.",
+      "covered_by_agent": true,
+      "rationale": "Agent states the same categories."
+    },
+    {
+      "ground_truth_claim": "No external model calls were executed.",
+      "covered_by_agent": true,
+      "rationale": "Agent states no model calls were executed."
+    },
+    {
+      "ground_truth_claim": "OPENAI_API_KEY was missing.",
+      "covered_by_agent": true,
+      "rationale": "Agent names the missing key."
+    },
+    {
+      "ground_truth_claim": "HF_TOKEN was missing.",
+      "covered_by_agent": true,
+      "rationale": "Agent names the missing token."
+    },
+    {
+      "ground_truth_claim": "Required packages including openai, transformers, torch, anthropic, and dotenv were missing.",
+      "covered_by_agent": true,
+      "rationale": "Agent names the same missing packages."
+    },
+    {
+      "ground_truth_claim": "The run lacked token logprob or logit support needed for p(true), normalized p(true), perplexity, sequence probability, and entropy.",
+      "covered_by_agent": true,
+      "rationale": "Agent states the wrapper lacked logprob/logit exposure for the same methods."
+    },
+    {
+      "ground_truth_claim": "A dry-run prompt manifest was built for 1,935 rows.",
+      "covered_by_agent": true,
+      "rationale": "Agent states a dry-run manifest covered 1,935 rows."
+    },
+    {
+      "ground_truth_claim": "The dry-run prompt manifest covered two text uncertainty methods.",
+      "covered_by_agent": true,
+      "rationale": "Agent states two text uncertainty methods."
+    },
+    {
+      "ground_truth_claim": "The dry-run prompt manifest covered five requested models.",
+      "covered_by_agent": true,
+      "rationale": "Agent states five models."
+    },
+    {
+      "ground_truth_claim": "The dry-run prompt manifest covered 19,350 planned requests total.",
+      "covered_by_agent": true,
+      "rationale": "Agent states 19,350 planned requests."
+    },
+    {
+      "ground_truth_claim": "The dry-run prompt manifest covered 3,870 planned text requests per model.",
+      "covered_by_agent": false,
+      "rationale": "Agent gives the total planned requests but not the per-model planned text request count."
+    },
+    {
+      "ground_truth_claim": "No AUROC was measured.",
+      "covered_by_agent": true,
+      "rationale": "Agent states no AUROC was measured."
+    },
+    {
+      "ground_truth_claim": "No uncertainty metric was measured.",
+      "covered_by_agent": true,
+      "rationale": "Agent states no uncertainty metric was measured."
+    }
+  ],
+  "unsupported_overclaims": [],
+  "precision": 1.0,
+  "recall": 0.9411764705882353,
+  "f1": 0.9696969696969697
+}

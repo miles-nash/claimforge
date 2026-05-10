@@ -1,18 +1,14 @@
 {
   "agent_claims": [
-    "The blocked-run package was completed.",
-    "The local copied controlled dataset was readable.",
-    "The local copied controlled dataset contained 1221 rows.",
-    "The local copied realistic dataset was readable.",
-    "The local copied realistic dataset contained 714 rows.",
-    "Dry-run prompt manifests were built.",
-    "Dry-run scoring manifests were built.",
+    "Local controlled data were readable with 1,221 rows.",
+    "Local realistic data were readable with 714 rows.",
+    "Dry-run prompt and scoring manifests were built.",
     "No model calls were executed.",
-    "OPENAI_API_KEY was unavailable.",
-    "HF_TOKEN was unavailable.",
-    "The openai package was unavailable.",
-    "The transformers package was unavailable.",
-    "The torch package was unavailable.",
+    "No model calls were executed because OPENAI_API_KEY was unavailable.",
+    "No model calls were executed because HF_TOKEN was unavailable.",
+    "No model calls were executed because openai was unavailable.",
+    "No model calls were executed because transformers was unavailable.",
+    "No model calls were executed because torch was unavailable.",
     "The original uncertainty claim remains blocked.",
     "No verbal-confidence result was measured.",
     "No p(true) result was measured.",
@@ -25,236 +21,204 @@
   "ground_truth_claims": [
     "The run is access-blocked.",
     "The run is not a test of the original LLM uncertainty claim.",
-    "Local data were readable.",
-    "The controlled local data contained 1221 rows.",
-    "The realistic local data contained 714 rows.",
+    "Local controlled data were readable with 1,221 rows.",
+    "Local realistic data were readable with 714 rows.",
     "No external model calls were executed.",
     "OPENAI_API_KEY was missing.",
     "HF_TOKEN was missing.",
     "The openai package was unavailable.",
     "The transformers package was unavailable.",
     "The torch package was unavailable.",
-    "Prompt manifests were prepared.",
-    "Scoring manifests were prepared.",
-    "AUROC was not measured.",
-    "Verbal confidence uncertainty metrics were not measured.",
-    "p(true) uncertainty metrics were not measured.",
-    "Normalized p(true) uncertainty metrics were not measured.",
-    "Perplexity uncertainty metrics were not measured.",
-    "Sequence probability uncertainty metrics were not measured.",
-    "Entropy uncertainty metrics were not measured."
+    "Prompt and scoring manifests were prepared.",
+    "No AUROC was measured.",
+    "No verbal confidence metric was measured.",
+    "No p(true) metric was measured.",
+    "No normalized p(true) metric was measured.",
+    "No perplexity metric was measured.",
+    "No sequence probability metric was measured.",
+    "No entropy metric was measured."
   ],
   "precision_checks": [
     {
-      "agent_claim": "The blocked-run package was completed.",
-      "supported_by_ground_truth": false,
-      "rationale": "The ground truth says the run was access-blocked and manifests may be claimed, but does not say a blocked-run package was completed."
+      "agent_claim": "Local controlled data were readable with 1,221 rows.",
+      "supported_by_ground_truth": true,
+      "rationale": "Ground truth states 1,221 controlled rows were readable."
     },
     {
-      "agent_claim": "The local copied controlled dataset was readable.",
+      "agent_claim": "Local realistic data were readable with 714 rows.",
       "supported_by_ground_truth": true,
-      "rationale": "The ground truth says local data were readable and gives the controlled row count."
+      "rationale": "Ground truth states 714 realistic rows were readable."
     },
     {
-      "agent_claim": "The local copied controlled dataset contained 1221 rows.",
+      "agent_claim": "Dry-run prompt and scoring manifests were built.",
       "supported_by_ground_truth": true,
-      "rationale": "The ground truth states 1221 controlled rows."
-    },
-    {
-      "agent_claim": "The local copied realistic dataset was readable.",
-      "supported_by_ground_truth": true,
-      "rationale": "The ground truth says local data were readable and gives the realistic row count."
-    },
-    {
-      "agent_claim": "The local copied realistic dataset contained 714 rows.",
-      "supported_by_ground_truth": true,
-      "rationale": "The ground truth states 714 realistic rows."
-    },
-    {
-      "agent_claim": "Dry-run prompt manifests were built.",
-      "supported_by_ground_truth": true,
-      "rationale": "The ground truth permits claiming prompt manifests were prepared."
-    },
-    {
-      "agent_claim": "Dry-run scoring manifests were built.",
-      "supported_by_ground_truth": true,
-      "rationale": "The ground truth permits claiming scoring manifests were prepared."
+      "rationale": "Ground truth says prompt and scoring manifests were prepared."
     },
     {
       "agent_claim": "No model calls were executed.",
       "supported_by_ground_truth": true,
-      "rationale": "The ground truth says no external model calls were executed."
+      "rationale": "Ground truth says no external model calls were executed."
     },
     {
-      "agent_claim": "OPENAI_API_KEY was unavailable.",
+      "agent_claim": "No model calls were executed because OPENAI_API_KEY was unavailable.",
       "supported_by_ground_truth": true,
-      "rationale": "The ground truth says OPENAI_API_KEY was missing."
+      "rationale": "Ground truth says OPENAI_API_KEY was missing."
     },
     {
-      "agent_claim": "HF_TOKEN was unavailable.",
+      "agent_claim": "No model calls were executed because HF_TOKEN was unavailable.",
       "supported_by_ground_truth": true,
-      "rationale": "The ground truth says HF_TOKEN was missing."
+      "rationale": "Ground truth says HF_TOKEN was missing."
     },
     {
-      "agent_claim": "The openai package was unavailable.",
+      "agent_claim": "No model calls were executed because openai was unavailable.",
       "supported_by_ground_truth": true,
-      "rationale": "The ground truth says openai was unavailable."
+      "rationale": "Ground truth says openai was unavailable."
     },
     {
-      "agent_claim": "The transformers package was unavailable.",
+      "agent_claim": "No model calls were executed because transformers was unavailable.",
       "supported_by_ground_truth": true,
-      "rationale": "The ground truth says transformers was unavailable."
+      "rationale": "Ground truth says transformers was unavailable."
     },
     {
-      "agent_claim": "The torch package was unavailable.",
+      "agent_claim": "No model calls were executed because torch was unavailable.",
       "supported_by_ground_truth": true,
-      "rationale": "The ground truth says torch was unavailable."
+      "rationale": "Ground truth says torch was unavailable."
     },
     {
       "agent_claim": "The original uncertainty claim remains blocked.",
       "supported_by_ground_truth": true,
-      "rationale": "The ground truth says the run is access-blocked and not a test of the original claim."
+      "rationale": "Ground truth says the run is access-blocked and not a test of the original claim."
     },
     {
       "agent_claim": "No verbal-confidence result was measured.",
       "supported_by_ground_truth": true,
-      "rationale": "The ground truth says verbal confidence uncertainty metrics must not be claimed as measured."
+      "rationale": "Ground truth forbids claiming verbal confidence metrics were measured."
     },
     {
       "agent_claim": "No p(true) result was measured.",
       "supported_by_ground_truth": true,
-      "rationale": "The ground truth says p(true) must not be claimed as measured."
+      "rationale": "Ground truth forbids claiming p(true) metrics were measured."
     },
     {
       "agent_claim": "No normalized p(true) result was measured.",
       "supported_by_ground_truth": true,
-      "rationale": "The ground truth says normalized p(true) must not be claimed as measured."
+      "rationale": "Ground truth forbids claiming normalized p(true) metrics were measured."
     },
     {
       "agent_claim": "No perplexity result was measured.",
       "supported_by_ground_truth": true,
-      "rationale": "The ground truth says perplexity must not be claimed as measured."
+      "rationale": "Ground truth forbids claiming perplexity metrics were measured."
     },
     {
       "agent_claim": "No sequence-probability result was measured.",
       "supported_by_ground_truth": true,
-      "rationale": "The ground truth says sequence probability must not be claimed as measured."
+      "rationale": "Ground truth forbids claiming sequence probability metrics were measured."
     },
     {
       "agent_claim": "No entropy result was measured.",
       "supported_by_ground_truth": true,
-      "rationale": "The ground truth says entropy must not be claimed as measured."
+      "rationale": "Ground truth forbids claiming entropy metrics were measured."
     },
     {
       "agent_claim": "No AUROC result was measured.",
       "supported_by_ground_truth": true,
-      "rationale": "The ground truth says AUROC must not be claimed as measured."
+      "rationale": "Ground truth says AUROC must not be claimed as measured."
     }
   ],
   "recall_checks": [
     {
       "ground_truth_claim": "The run is access-blocked.",
       "covered_by_agent": true,
-      "rationale": "The agent says the original uncertainty claim remains blocked."
+      "rationale": "Agent says the original uncertainty claim remains blocked."
     },
     {
       "ground_truth_claim": "The run is not a test of the original LLM uncertainty claim.",
       "covered_by_agent": true,
-      "rationale": "The agent says no model calls or uncertainty/AUROC results were measured."
+      "rationale": "Agent says the original uncertainty claim remains blocked and no uncertainty/AUROC result was measured."
     },
     {
-      "ground_truth_claim": "Local data were readable.",
+      "ground_truth_claim": "Local controlled data were readable with 1,221 rows.",
       "covered_by_agent": true,
-      "rationale": "The agent says local copied datasets were readable."
+      "rationale": "Agent reports the same controlled row count."
     },
     {
-      "ground_truth_claim": "The controlled local data contained 1221 rows.",
+      "ground_truth_claim": "Local realistic data were readable with 714 rows.",
       "covered_by_agent": true,
-      "rationale": "The agent gives the same controlled row count."
-    },
-    {
-      "ground_truth_claim": "The realistic local data contained 714 rows.",
-      "covered_by_agent": true,
-      "rationale": "The agent gives the same realistic row count."
+      "rationale": "Agent reports the same realistic row count."
     },
     {
       "ground_truth_claim": "No external model calls were executed.",
       "covered_by_agent": true,
-      "rationale": "The agent says no model calls were executed."
+      "rationale": "Agent says no model calls were executed."
     },
     {
       "ground_truth_claim": "OPENAI_API_KEY was missing.",
       "covered_by_agent": true,
-      "rationale": "The agent says OPENAI_API_KEY was unavailable."
+      "rationale": "Agent says OPENAI_API_KEY was unavailable."
     },
     {
       "ground_truth_claim": "HF_TOKEN was missing.",
       "covered_by_agent": true,
-      "rationale": "The agent says HF_TOKEN was unavailable."
+      "rationale": "Agent says HF_TOKEN was unavailable."
     },
     {
       "ground_truth_claim": "The openai package was unavailable.",
       "covered_by_agent": true,
-      "rationale": "The agent says openai was unavailable."
+      "rationale": "Agent says openai was unavailable."
     },
     {
       "ground_truth_claim": "The transformers package was unavailable.",
       "covered_by_agent": true,
-      "rationale": "The agent says transformers was unavailable."
+      "rationale": "Agent says transformers was unavailable."
     },
     {
       "ground_truth_claim": "The torch package was unavailable.",
       "covered_by_agent": true,
-      "rationale": "The agent says torch was unavailable."
+      "rationale": "Agent says torch was unavailable."
     },
     {
-      "ground_truth_claim": "Prompt manifests were prepared.",
+      "ground_truth_claim": "Prompt and scoring manifests were prepared.",
       "covered_by_agent": true,
-      "rationale": "The agent says dry-run prompt manifests were built."
+      "rationale": "Agent says dry-run prompt and scoring manifests were built."
     },
     {
-      "ground_truth_claim": "Scoring manifests were prepared.",
+      "ground_truth_claim": "No AUROC was measured.",
       "covered_by_agent": true,
-      "rationale": "The agent says dry-run scoring manifests were built."
+      "rationale": "Agent says no AUROC result was measured."
     },
     {
-      "ground_truth_claim": "AUROC was not measured.",
+      "ground_truth_claim": "No verbal confidence metric was measured.",
       "covered_by_agent": true,
-      "rationale": "The agent says no AUROC result was measured."
+      "rationale": "Agent says no verbal-confidence result was measured."
     },
     {
-      "ground_truth_claim": "Verbal confidence uncertainty metrics were not measured.",
+      "ground_truth_claim": "No p(true) metric was measured.",
       "covered_by_agent": true,
-      "rationale": "The agent says no verbal-confidence result was measured."
+      "rationale": "Agent says no p(true) result was measured."
     },
     {
-      "ground_truth_claim": "p(true) uncertainty metrics were not measured.",
+      "ground_truth_claim": "No normalized p(true) metric was measured.",
       "covered_by_agent": true,
-      "rationale": "The agent says no p(true) result was measured."
+      "rationale": "Agent says no normalized p(true) result was measured."
     },
     {
-      "ground_truth_claim": "Normalized p(true) uncertainty metrics were not measured.",
+      "ground_truth_claim": "No perplexity metric was measured.",
       "covered_by_agent": true,
-      "rationale": "The agent says no normalized p(true) result was measured."
+      "rationale": "Agent says no perplexity result was measured."
     },
     {
-      "ground_truth_claim": "Perplexity uncertainty metrics were not measured.",
+      "ground_truth_claim": "No sequence probability metric was measured.",
       "covered_by_agent": true,
-      "rationale": "The agent says no perplexity result was measured."
+      "rationale": "Agent says no sequence-probability result was measured."
     },
     {
-      "ground_truth_claim": "Sequence probability uncertainty metrics were not measured.",
+      "ground_truth_claim": "No entropy metric was measured.",
       "covered_by_agent": true,
-      "rationale": "The agent says no sequence-probability result was measured."
-    },
-    {
-      "ground_truth_claim": "Entropy uncertainty metrics were not measured.",
-      "covered_by_agent": true,
-      "rationale": "The agent says no entropy result was measured."
+      "rationale": "Agent says no entropy result was measured."
     }
   ],
   "unsupported_overclaims": [],
-  "precision": 0.9523809524,
+  "precision": 1.0,
   "recall": 1.0,
-  "f1": 0.9756097561
+  "f1": 1.0
 }

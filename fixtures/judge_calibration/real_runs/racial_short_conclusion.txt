@@ -1,0 +1,20 @@
+Completed the run as a blocked-model fallback.
+
+Key result: the original GPT-3.5 claim was **not tested** because this environment is missing `OPENAI_API_KEY` and required Python imports including `openai`. I did not attempt external model calls.
+
+Artifacts written:
+- `access_check.json`
+- `data_audit.json`
+- `prompt_manifest.jsonl`
+- `prompt_preview.json`
+- `scoring_manifest.jsonl`
+- `local_baselines.json`
+- `run_summary.json`
+
+What was measured locally:
+- Dataset loaded: 100 patient records.
+- Built a fair paired counterfactual audit: every patient appears under each race/ethnicity condition.
+- Generated 600 planned requests for `gpt-3.5-turbo` and 600 for `gpt-4`, within the 1000-call/model budget.
+- Redacted explicit identity/nationality cues in prompt construction to avoid leakage.
+
+Conclusion: measured evidence only supports that the audit design is ready and locally valid. The claim "GPT-3.5 predicts higher medical costs or longer hospital stays for certain racial groups" remains **blocked, not supported or refuted**. The next unblocker is to provide `OPENAI_API_KEY` and install the missing SDK dependencies.
